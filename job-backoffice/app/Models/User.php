@@ -54,4 +54,19 @@ class User extends Authenticatable
             'deleted_at' => 'datetime',
         ];
     }
+
+    public function resumes()
+    {
+        return $this->hasMany(Resume::class, 'userId', 'id');
+    }
+
+    public function jobApplications()
+    {
+        return $this->hasMany(JobApplication::class, 'userId', 'id');
+    }
+
+    public function companies()
+    {
+        return $this->hasOne(Company::class, 'ownerId', 'id');
+    }
 }
