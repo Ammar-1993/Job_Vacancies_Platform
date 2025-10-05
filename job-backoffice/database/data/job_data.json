@@ -1,0 +1,310 @@
+{
+    "jobCategories": [
+        "Frontend Development",
+        "Backend Development",
+        "Full Stack Development",
+        "DevOps Engineering",
+        "Mobile Development",
+        "Cloud Engineering",
+        "Software Architecture"
+    ],
+    "companies": [
+        {
+            "name": "TechCore Solutions",
+            "address": "123 Tech Street, San Francisco, CA 94105",
+            "industry": "Technology",
+            "website": "https://techcoresolutions.com",
+            "description": "Leading software development company specializing in enterprise solutions"
+        },
+        {
+            "name": "Digital Innovate Labs",
+            "address": "456 Innovation Avenue, New York, NY 10001",
+            "industry": "Technology",
+            "website": "https://digitalinnovatelabs.com",
+            "description": "Innovation-driven software company focused on cutting-edge technologies"
+        },
+        {
+            "name": "CloudTech Systems",
+            "address": "789 Cloud Boulevard, Seattle, WA 98101",
+            "industry": "Technology",
+            "website": "https://cloudtechsystems.com",
+            "description": "Cloud-native solutions provider with expertise in scalable architectures"
+        },
+        {
+            "name": "WebStack Technologies",
+            "address": "321 Web Lane, Austin, TX 78701",
+            "industry": "Technology",
+            "website": "https://webstacktech.com",
+            "description": "Full-service web development company delivering modern web solutions"
+        },
+        {
+            "name": "Agile Software Corp",
+            "address": "654 Agile Road, Boston, MA 02108",
+            "industry": "Technology",
+            "website": "https://agilesoftwarecorp.com",
+            "description": "Agile-first software development company specializing in rapid delivery"
+        }
+    ],
+    "jobVacancies": [
+        {
+            "title": "Senior Frontend Developer",
+            "description": "We are seeking a talented Senior Frontend Developer to join our engineering team. You will be responsible for building responsive and interactive user interfaces using modern JavaScript frameworks. The ideal candidate should have strong experience with React.js, TypeScript, and a passion for creating exceptional user experiences.",
+            "location": "San Francisco, CA",
+            "type": "Full-time",
+            "salary": 150000,
+            "category": "Frontend Development",
+            "company": "TechCore Solutions",
+            "technologies": ["React.js", "TypeScript", "Next.js", "Tailwind CSS"]
+        },
+        {
+            "title": "Frontend Developer",
+            "description": "We're looking for a Frontend Developer to create beautiful and functional user interfaces. You'll work with our design team to implement pixel-perfect designs and ensure a great user experience across all devices.",
+            "location": "Remote",
+            "type": "Remote",
+            "salary": 90000,
+            "category": "Frontend Development",
+            "company": "Digital Innovate Labs",
+            "technologies": ["Vue.js", "JavaScript", "HTML5/CSS3", "Tailwind CSS"]
+        },
+        {
+            "title": "Lead Frontend Engineer",
+            "description": "As a Lead Frontend Engineer, you'll be responsible for setting technical direction, mentoring junior developers, and ensuring high-quality code across our frontend applications.",
+            "location": "New York, NY",
+            "type": "Full-time",
+            "salary": 180000,
+            "category": "Frontend Development",
+            "company": "CloudTech Systems",
+            "technologies": ["Angular", "TypeScript", "RxJS", "NgRx"]
+        },
+        {
+            "title": "Senior Backend Developer",
+            "description": "We're looking for a Senior Backend Developer to design and implement scalable server-side solutions. The role involves working with Node.js and Python to build robust APIs and maintain high-performance systems.",
+            "location": "London, UK",
+            "type": "Hybrid",
+            "salary": 140000,
+            "category": "Backend Development",
+            "company": "WebStack Technologies",
+            "technologies": ["Node.js", "Python/Django", "PostgreSQL", "Redis"]
+        },
+        {
+            "title": "Backend Engineer",
+            "description": "Join our team as a Backend Engineer to develop and maintain our server-side applications. You'll work with our frontend team to create seamless integrations and optimize performance.",
+            "location": "Berlin, Germany",
+            "type": "Full-time",
+            "salary": 95000,
+            "category": "Backend Development",
+            "company": "Agile Software Corp",
+            "technologies": ["Java/Spring Boot", "MySQL", "MongoDB", "Docker"]
+        },
+        {
+            "title": "Lead Backend Developer",
+            "description": "As a Lead Backend Developer, you'll architect scalable systems, establish coding standards, and guide the backend development team in delivering high-quality solutions.",
+            "location": "Amsterdam, Netherlands",
+            "type": "Full-time",
+            "salary": 170000,
+            "category": "Backend Development",
+            "company": "TechCore Solutions",
+            "technologies": ["Go", "PostgreSQL", "Redis", "Kubernetes"]
+        },
+        {
+            "title": "Full Stack Developer",
+            "description": "We are hiring a Full Stack Developer proficient in both frontend and backend technologies. The ideal candidate will have hands-on experience with modern frameworks and be comfortable working across the entire technology stack.",
+            "location": "Toronto, Canada",
+            "type": "Hybrid",
+            "salary": 110000,
+            "category": "Full Stack Development",
+            "company": "Digital Innovate Labs",
+            "technologies": ["React.js", "Node.js", "MongoDB", "Express"]
+        },
+        {
+            "title": "Senior Full Stack Engineer",
+            "description": "Join our team as a Senior Full Stack Engineer to work on complex applications that span the entire technology stack. You'll be involved in architecture decisions and mentoring junior developers.",
+            "location": "Singapore",
+            "type": "Full-time",
+            "salary": 160000,
+            "category": "Full Stack Development",
+            "company": "CloudTech Systems",
+            "technologies": ["Vue.js", "PHP/Laravel", "MySQL", "Redis"]
+        },
+        {
+            "title": "Lead Full Stack Developer",
+            "description": "As a Lead Full Stack Developer, you'll be responsible for the entire development lifecycle, from requirements gathering to deployment. You'll lead a team of developers and ensure high-quality deliverables.",
+            "location": "Dubai, UAE",
+            "type": "Full-time",
+            "salary": 190000,
+            "category": "Full Stack Development",
+            "company": "WebStack Technologies",
+            "technologies": ["Angular", "Java/Spring Boot", "PostgreSQL", "Docker"]
+        },
+        {
+            "title": "DevOps Engineer",
+            "description": "We're looking for a DevOps Engineer to streamline our development and deployment processes. You'll work with our engineering teams to implement CI/CD pipelines and ensure smooth operations.",
+            "location": "Remote",
+            "type": "Remote",
+            "salary": 130000,
+            "category": "DevOps Engineering",
+            "company": "Agile Software Corp",
+            "technologies": ["Docker", "Kubernetes", "AWS", "Jenkins"]
+        },
+        {
+            "title": "Cloud Infrastructure Engineer",
+            "description": "Join our team as a Cloud Infrastructure Engineer to design and implement scalable cloud solutions. You'll work with our development teams to ensure optimal performance and reliability.",
+            "location": "San Francisco, CA",
+            "type": "Full-time",
+            "salary": 145000,
+            "category": "Cloud Engineering",
+            "company": "TechCore Solutions",
+            "technologies": ["AWS", "Azure", "Terraform", "Kubernetes"]
+        },
+        {
+            "title": "Software Architect",
+            "description": "We're seeking a Software Architect to design scalable and maintainable systems. You'll work with our development teams to establish architectural patterns and ensure best practices are followed.",
+            "location": "New York, NY",
+            "type": "Full-time",
+            "salary": 200000,
+            "category": "Software Architecture",
+            "company": "Digital Innovate Labs",
+            "technologies": ["Microservices", "Event-Driven Architecture", "Domain-Driven Design", "Cloud Native"]
+        },
+        {
+            "title": "Mobile Developer",
+            "description": "Join our team as a Mobile Developer to create engaging mobile applications. You'll work with our design team to implement beautiful and functional mobile experiences.",
+            "location": "London, UK",
+            "type": "Hybrid",
+            "salary": 100000,
+            "category": "Mobile Development",
+            "company": "CloudTech Systems",
+            "technologies": ["React Native", "Swift", "Kotlin", "Firebase"]
+        },
+        {
+            "title": "Senior Mobile Developer",
+            "description": "We're looking for a Senior Mobile Developer to lead our mobile development efforts. You'll be responsible for setting technical direction and ensuring high-quality mobile applications.",
+            "location": "Berlin, Germany",
+            "type": "Full-time",
+            "salary": 140000,
+            "category": "Mobile Development",
+            "company": "WebStack Technologies",
+            "technologies": ["Flutter", "Dart", "Firebase", "RESTful APIs"]
+        },
+        {
+            "title": "Frontend Developer",
+            "description": "We are seeking a Frontend Developer to join our engineering team. You will be responsible for building responsive and interactive user interfaces using modern JavaScript frameworks.",
+            "location": "Amsterdam, Netherlands",
+            "type": "Full-time",
+            "salary": 85000,
+            "category": "Frontend Development",
+            "company": "Agile Software Corp",
+            "technologies": ["React.js", "JavaScript", "HTML5/CSS3", "Redux"]
+        },
+        {
+            "title": "Backend Developer",
+            "description": "We're looking for a Backend Developer to design and implement scalable server-side solutions. The role involves working with modern backend technologies to build robust APIs and maintain high-performance systems.",
+            "location": "Toronto, Canada",
+            "type": "Hybrid",
+            "salary": 90000,
+            "category": "Backend Development",
+            "company": "TechCore Solutions",
+            "technologies": ["Node.js", "Express", "MongoDB", "Redis"]
+        },
+        {
+            "title": "Full Stack Developer",
+            "description": "Join our team as a Full Stack Developer to work on end-to-end solutions. You'll be involved in both frontend and backend development, ensuring seamless integration and optimal performance.",
+            "location": "Singapore",
+            "type": "Full-time",
+            "salary": 105000,
+            "category": "Full Stack Development",
+            "company": "Digital Innovate Labs",
+            "technologies": ["Vue.js", "Node.js", "PostgreSQL", "Docker"]
+        },
+        {
+            "title": "DevOps Engineer",
+            "description": "We're seeking a DevOps Engineer to streamline our development and deployment processes. You'll work with our engineering teams to implement CI/CD pipelines and ensure smooth operations.",
+            "location": "Dubai, UAE",
+            "type": "Full-time",
+            "salary": 120000,
+            "category": "DevOps Engineering",
+            "company": "CloudTech Systems",
+            "technologies": ["Docker", "Kubernetes", "AWS", "GitLab"]
+        },
+        {
+            "title": "Cloud Engineer",
+            "description": "Join our team as a Cloud Engineer to design and implement scalable cloud solutions. You'll work with our development teams to ensure optimal performance and reliability.",
+            "location": "Remote",
+            "type": "Remote",
+            "salary": 135000,
+            "category": "Cloud Engineering",
+            "company": "WebStack Technologies",
+            "technologies": ["AWS", "Azure", "Terraform", "Kubernetes"]
+        },
+        {
+            "title": "Software Architect",
+            "description": "We're looking for a Software Architect to design scalable and maintainable systems. You'll work with our development teams to establish architectural patterns and ensure best practices are followed.",
+            "location": "San Francisco, CA",
+            "type": "Full-time",
+            "salary": 190000,
+            "category": "Software Architecture",
+            "company": "Agile Software Corp",
+            "technologies": ["Microservices", "Event-Driven Architecture", "Domain-Driven Design", "Cloud Native"]
+        },
+        {
+            "title": "Mobile Developer",
+            "description": "Join our team as a Mobile Developer to create engaging mobile applications. You'll work with our design team to implement beautiful and functional mobile experiences.",
+            "location": "New York, NY",
+            "type": "Hybrid",
+            "salary": 95000,
+            "category": "Mobile Development",
+            "company": "TechCore Solutions",
+            "technologies": ["React Native", "JavaScript", "Firebase", "RESTful APIs"]
+        },
+        {
+            "title": "Senior Frontend Developer",
+            "description": "We're seeking a Senior Frontend Developer to join our engineering team. You will be responsible for building responsive and interactive user interfaces using modern JavaScript frameworks.",
+            "location": "London, UK",
+            "type": "Full-time",
+            "salary": 145000,
+            "category": "Frontend Development",
+            "company": "Digital Innovate Labs",
+            "technologies": ["Angular", "TypeScript", "RxJS", "NgRx"]
+        },
+        {
+            "title": "Backend Developer",
+            "description": "Join our team as a Backend Developer to design and implement scalable server-side solutions. The role involves working with modern backend technologies to build robust APIs.",
+            "location": "Berlin, Germany",
+            "type": "Full-time",
+            "salary": 95000,
+            "category": "Backend Development",
+            "company": "CloudTech Systems",
+            "technologies": ["Python/Django", "PostgreSQL", "Redis", "Docker"]
+        },
+        {
+            "title": "Full Stack Developer",
+            "description": "We're looking for a Full Stack Developer to work on end-to-end solutions. You'll be involved in both frontend and backend development, ensuring seamless integration and optimal performance.",
+            "location": "Amsterdam, Netherlands",
+            "type": "Hybrid",
+            "salary": 110000,
+            "category": "Full Stack Development",
+            "company": "WebStack Technologies",
+            "technologies": ["React.js", "Node.js", "MongoDB", "Express"]
+        },
+        {
+            "title": "DevOps Engineer",
+            "description": "Join our team as a DevOps Engineer to streamline our development and deployment processes. You'll work with our engineering teams to implement CI/CD pipelines and ensure smooth operations.",
+            "location": "Toronto, Canada",
+            "type": "Full-time",
+            "salary": 125000,
+            "category": "DevOps Engineering",
+            "company": "Agile Software Corp",
+            "technologies": ["Docker", "Kubernetes", "AWS", "Jenkins"]
+        },
+        {
+            "title": "Cloud Engineer",
+            "description": "We're seeking a Cloud Engineer to design and implement scalable cloud solutions. You'll work with our development teams to ensure optimal performance and reliability.",
+            "location": "Singapore",
+            "type": "Full-time",
+            "salary": 130000,
+            "category": "Cloud Engineering",
+            "company": "TechCore Solutions",
+            "technologies": ["AWS", "Azure", "Terraform", "Kubernetes"]
+        }
+    ]
+} 
