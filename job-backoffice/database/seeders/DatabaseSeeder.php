@@ -66,6 +66,20 @@ class DatabaseSeeder extends Seeder
             // Fetch the job category using name
             $jobCategory = JobCategory::where('name', $job['category'])->first();
 
+            // Normalize job type to match DB enum values (map common variants)
+            $rawType = strtolower(trim($job['type'] ?? 'full-time'));
+            $typeMap = [
+                'full-time' => 'Full-Time',
+                'full time' => 'Full-Time',
+                'fulltime' => 'Full-Time',
+                'full' => 'Full-Time',
+                'remote' => 'Remote',
+                'hybrid' => 'Hybrid',
+                'contract' => 'Contract',
+            ];
+
+            $normalizedType = $typeMap[$rawType] ?? ucwords($rawType);
+
             JobVacancy::firstOrCreate([
                 'title' => $job['title'],
                 'companyId' => $company->id,
@@ -73,8 +87,8 @@ class DatabaseSeeder extends Seeder
             ], [
                 'description' => $job['description'],
                 'location' => $job['location'],
-                'type' => $job['type'],
-                'salary' => $job['salary'],
+                'type' => $normalizedType,
+                'salary' => (string) $job['salary'],
             ]);
         }
 
