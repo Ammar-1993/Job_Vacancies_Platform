@@ -15,17 +15,30 @@ use App\Http\Controllers\UserController;
 
 
 Route::middleware('auth')->group(function () {
+
+    // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
-    Route::get('/job-categories', [JobCategoryController::class, 'index'])->name('job-categories.index');
-    Route::get('/job-vacancies', [JobVacancyController::class, 'index'])->name('job-vacancies.index');
-    Route::get('/job-applications', [JobApplicatioController::class, 'index'])->name('job-applications.index');
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
+    // Companies
+    Route::resource('companies', CompanyController::class);
 
+    // Job Categories
+    Route::resource('job-categories', JobCategoryController::class);
+    Route::put('job-categories/{job_category}/restore', [JobCategoryController::class, 'restore'])->name('job-categories.restore');
+
+    // Job Vacancies
+    Route::resource('job-vacancies', JobVacancyController::class);
+
+    // Job Applications
+    Route::resource('job-applications', JobApplicatioController::class);
+
+    // Users
+    Route::resource('users', UserController::class);
+
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
