@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
 
     // Job Vacancies
     Route::resource('job-vacancies', JobVacancyController::class);
+    // Restore route for soft-deleted job vacancies
+    Route::put('job-vacancies/{id}/restore', [JobVacancyController::class, 'restore'])->name('job-vacancies.restore');
 
     // Job Applications
     Route::resource('job-applications', JobApplicatioController::class);

@@ -10,7 +10,6 @@ use App\Models\JobCategory;
 
 class JobVacancy extends Model
 {
-    //
     use HasFactory, HasUuids, SoftDeletes;
     protected $table = 'job_vacancies';
 
