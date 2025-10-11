@@ -6,8 +6,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\JobCategoryController;
 use App\Http\Controllers\JobVacancyController;
-use App\Http\Controllers\JobApplicatioController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\JobApplicationController;
 
 
 
@@ -34,7 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::put('job-vacancies/{id}/restore', [JobVacancyController::class, 'restore'])->name('job-vacancies.restore');
 
     // Job Applications
-    Route::resource('job-applications', JobApplicatioController::class);
+    Route::resource('job-applications', JobApplicationController::class);
+    // Restore route for soft-deleted job applications
+    Route::put('job-applications/{id}/restore', [JobApplicationController::class, 'restore'])->name('job-applications.restore');
 
     // Users
     Route::resource('users', UserController::class);
