@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
 
     // Users
     Route::resource('users', UserController::class);
+    Route::put('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore' );
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
