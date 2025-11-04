@@ -10,7 +10,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // Shared Routes
-Route::middleware(['auth', 'role:admin,company-owner'])->group(function () {
+Route::middleware(['auth', 'role:admin,company_owner'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // Job Applications
@@ -23,7 +23,7 @@ Route::middleware(['auth', 'role:admin,company-owner'])->group(function () {
 });
 
 // Company Routes
-Route::middleware(['auth', 'role:company-owner'])->group(function () {
+Route::middleware(['auth', 'role:company_owner'])->group(function () {
     Route::get('/my-company', [CompanyController::class, 'show'])->name('my-company.show');
     Route::get('/my-company/edit', [CompanyController::class, 'edit'])->name('my-company.edit');
     Route::put('/my-company', [CompanyController::class, 'update'])->name('my-company.update');

@@ -47,7 +47,7 @@ class CompanyController extends Controller
             'name' => $validated['owner_name'],
             'email' => $validated['owner_email'],
             'password' => Hash::make($validated['owner_password']),
-            'role' => 'company-owner',
+            'role' => 'company_owner',
         ]);
 
         // Return error if owner creation fails
@@ -113,7 +113,7 @@ class CompanyController extends Controller
 
         $company->owner->update($ownerData);
 
-        if (auth()->user()->role == 'company-owner') {
+        if (auth()->user()->role == 'company_owner') {
             return redirect()->route('my-company.show')->with('success', 'Company updated successfully!');
         }
 

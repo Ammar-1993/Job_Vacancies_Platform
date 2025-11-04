@@ -98,7 +98,7 @@ class DatabaseSeeder extends Seeder
 
         // ##### Create Job Applications #####
         foreach ($jobApplicationsData['jobApplications'] as $application) {
-            // Create teh job-seeker applicant
+            // Create teh job_seeker applicant
             $applicant = User::firstOrCreate([
                 'email' => fake()->unique()->safeEmail(),
             ], [

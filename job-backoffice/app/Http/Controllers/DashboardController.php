@@ -21,9 +21,9 @@ class DashboardController extends Controller
 
     private function adminDashboard()
     {
-        // Last 30 days active users (job-seeker role)
+        // Last 30 days active users (job_seeker role)
         $activeUsers = User::where('last_login_at', '>=', now()->subDays(30))
-            ->where('role', 'job-seeker')->count();
+            ->where('role', 'job_seeker')->count();
 
         // Total jobs (not deleted)
         $totalJobs = JobVacancy::whereNull('deleted_at')->count();
@@ -74,7 +74,7 @@ class DashboardController extends Controller
 
         // filter active users by applying to jobs of the company
         $activeUsers = User::where('last_login_at', '>=', now()->subDays(30))
-            ->where('role', 'job-seeker')
+            ->where('role', 'job_seeker')
             ->whereHas('jobApplications', function($query) use ($company) {
                 $query->whereIn('jobVacancyId', $company->jobVacancies->pluck('id'));
             })

@@ -1,7 +1,7 @@
 @php
     if (auth()->user()->role == 'admin') {
         $formAction = route('companies.update', ['company' => $company->id, 'redirectToList' => request('redirectToList')]);
-    } else if (auth()->user()->role == 'company-owner') {
+    } else if (auth()->user()->role == 'company_owner') {
         $formAction = route('my-company.update');
     }
 @endphp
@@ -132,7 +132,7 @@
 
 
                 <div class="flex justify-end space-x-4">
-                    @if (auth()->user()->role == 'company-owner')
+                    @if (auth()->user()->role == 'company_owner')
                         <a href="{{ route('my-company.show') }}"
                             class="px-4 py-2 rounded-md text-gray-500 hover:text-gray-700">
                             Cancel

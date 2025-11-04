@@ -15,7 +15,7 @@ class JobApplicationController extends Controller
         // Active
         $query = JobApplication::latest();
 
-        if(auth()->user()->role == 'company-owner'){
+        if(auth()->user()->role == 'company_owner'){
             $query->whereHas('jobVacancy', function($query) {
                 $query->where('companyId', auth()->user()->company->id);
             });
