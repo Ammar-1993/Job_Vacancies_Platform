@@ -18,8 +18,14 @@ class JobVacancyController extends Controller
         // Active
         $query = JobVacancy::latest();
 
-        if(auth()->user()->role == 'company_owner'){
-            $query->where('companyId', auth()->user()->company->id);
+        if (auth()->user()->role == 'company_owner') {
+            $company = auth()->user()->company;
+            if (! $company) {
+                // No company attached to this user — return no results
+                $query->whereRaw('0 = 1');
+            } else {
+                $query->where('companyId', $company->id);
+            }
         }
 
         // Archived

@@ -28,7 +28,11 @@
 
                     <div class="flex items-center gap-2">
                         <span>Applied With: {{ $jobApplication->resume->filename }}</span>
-                        <a href="{{ Storage::disk('cloud')->url($jobApplication->resume->fileUri) }}" target="_blank"
+                        @php
+                            /** @var \Illuminate\Filesystem\FilesystemAdapter $cloudDisk */
+                            $cloudDisk = Storage::disk('cloud');
+                        @endphp
+                        <a href="{{ $cloudDisk->url($jobApplication->resume->fileUri) }}" target="_blank"
                             class="text-indigo-500 hover:text-indigo-600">View Resume</a>
                     </div>
 

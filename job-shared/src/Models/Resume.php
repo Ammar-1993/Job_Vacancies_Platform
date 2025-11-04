@@ -17,8 +17,12 @@ class Resume extends Model
 
     protected $fillable = [
       
+        // canonical names (DB columns)
         'fileName',
         'fileUrl',
+        // alternate names used elsewhere in the app (map to canonical names)
+        'filename',
+        'fileUri',
         'summary',
         'contactDetails',
         'education',
@@ -42,6 +46,38 @@ class Resume extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'userId', 'id');
+    }
+
+    /**
+     * Accessor for legacy/alternate attribute `filename` -> maps to DB `fileName`.
+     */
+    public function getFilenameAttribute()
+    {
+        return $this->attributes['fileName'] ?? null;
+    }
+
+    /**
+     * Mutator for legacy/alternate attribute `filename` -> maps to DB `fileName`.
+     */
+    public function setFilenameAttribute($value)
+    {
+        $this->attributes['fileName'] = $value;
+    }
+
+    /**
+     * Accessor for legacy/alternate attribute `fileUri` -> maps to DB `fileUrl`.
+     */
+    public function getFileUriAttribute()
+    {
+        return $this->attributes['fileUrl'] ?? null;
+    }
+
+    /**
+     * Mutator for legacy/alternate attribute `fileUri` -> maps to DB `fileUrl`.
+     */
+    public function setFileUriAttribute($value)
+    {
+        $this->attributes['fileUrl'] = $value;
     }
 
     public function jobApplications()

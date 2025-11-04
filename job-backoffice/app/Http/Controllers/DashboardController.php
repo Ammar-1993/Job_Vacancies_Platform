@@ -72,6 +72,19 @@ class DashboardController extends Controller
 
         $company = auth()->user()->company;
 
+        // If the authenticated user has no company relation, return empty/zeroed analytics
+        if (! $company) {
+            $analytics = [
+                'activeUsers' => 0,
+                'totalJobs' => 0,
+                'totalApplications' => 0,
+                'mostAppliedJobs' => collect(),
+                'conversionRates' => collect(),
+            ];
+
+            return $analytics;
+        }
+
         // filter active users by applying to jobs of the company
         $activeUsers = User::where('last_login_at', '>=', now()->subDays(30))
             ->where('role', 'job_seeker')
