@@ -13,8 +13,17 @@ return new class extends Migration
     public function up(): void
     {
         if (Schema::hasTable('job_vacancies') && Schema::hasColumn('job_vacancies', 'description')) {
-            // Use raw statement to avoid doctrine/dbal dependency. Works on MySQL/MariaDB.
-            DB::statement('ALTER TABLE `job_vacancies` MODIFY `description` TEXT');
+            $driver = null;
+            try {
+                $driver = DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME);
+            } catch (\Throwable $e) {
+            }
+
+            // Only run MODIFY on mysql/mariadb. SQLite (tests) doesn't support this syntax.
+            if (in_array($driver, ['mysql', 'mariadb'])) {
+                // Use raw statement to avoid doctrine/dbal dependency. Works on MySQL/MariaDB.
+                DB::statement('ALTER TABLE `job_vacancies` MODIFY `description` TEXT');
+            }
         }
     }
 
@@ -24,7 +33,15 @@ return new class extends Migration
     public function down(): void
     {
         if (Schema::hasTable('job_vacancies') && Schema::hasColumn('job_vacancies', 'description')) {
-            DB::statement('ALTER TABLE `job_vacancies` MODIFY `description` VARCHAR(255)');
+            $driver = null;
+            try {
+                $driver = DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME);
+            } catch (\Throwable $e) {
+            }
+
+            if (in_array($driver, ['mysql', 'mariadb'])) {
+                DB::statement('ALTER TABLE `job_vacancies` MODIFY `description` VARCHAR(255)');
+            }
         }
     }
 };
