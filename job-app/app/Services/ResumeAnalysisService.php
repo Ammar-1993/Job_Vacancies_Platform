@@ -18,12 +18,12 @@ class ResumeAnalysisService
             Log::debug('Successfully extracted text from pdf file' . strlen($rawText) . ' characters');
 
             // Use OpenAI API to organize the text into a structured format
-            $response = OpenAI::chat()->create([
+            $response = $this->callOpenAiWithRetries([
                 'model' => 'gpt-4o',
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => 'You are a percise resume parser. Extract information exactly as it appears in the resume without adding any interpretation or additional information. The output should be in JSON format.'
+                        'content' => 'You are a precise resume parser. Extract information exactly as it appears in the resume without adding any interpretation or additional information. The output should be in JSON format.'
                     ],
                     [
                         'role' => 'user',
@@ -39,10 +39,10 @@ class ResumeAnalysisService
             $result = $response->choices[0]->message->content;
             Log::debug('OpenAI response: ' . $result);
 
-            $parsedResult = json_decode($result, true);
+            $parsedResult = $this->extractFirstJson($result);
 
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                Log::error('Failed to parse OpenAI response: ' . json_last_error_msg());
+            if ($parsedResult === null) {
+                Log::error('Failed to parse OpenAI response: unable to find valid JSON in response');
                 throw new \Exception('Failed to parse OpenAI response');
             }
 
@@ -63,7 +63,7 @@ class ResumeAnalysisService
                 'education' => $parsedResult['education'] ?? ''
             ];
         } catch (\Exception $e) {
-            Log::error('Error extracting resume information: ' . $e->getMessage());
+            Log::error('Error extracting resume information: ' . $e->getMessage() . ' | trace: ' . $e->getTraceAsString());
             return [
                 'summary' => '',
                 'skills' => '',
@@ -184,5 +184,86 @@ class ResumeAnalysisService
         unlink($tempFile);
 
         return $text;
+    }
+
+    /**
+     * Call OpenAI chat.create with retries on rate limit or temporary failures.
+     * Returns the response object on success or throws the last exception on failure.
+     */
+    private function callOpenAiWithRetries(array $payload)
+    {
+        $maxAttempts = 3;
+        $attempt = 0;
+        $backoffSeconds = 1;
+
+        while ($attempt < $maxAttempts) {
+            try {
+                return OpenAI::chat()->create($payload);
+            } catch (\Throwable $e) {
+                $attempt++;
+
+                $message = strtolower($e->getMessage() ?? '');
+                $code = (int) $e->getCode();
+
+                $isRateLimit = ($code === 429) || str_contains($message, 'rate limit') || str_contains($message, 'too many requests');
+
+                Log::warning("OpenAI request failed (attempt {$attempt}/{$maxAttempts}) - code: {$code}, message: {$e->getMessage()}");
+
+                if ($attempt >= $maxAttempts || ! $isRateLimit) {
+                    throw $e;
+                }
+
+                sleep($backoffSeconds);
+                $backoffSeconds *= 2;
+            }
+        }
+
+        throw new \RuntimeException('OpenAI request failed after retries');
+    }
+
+    /**
+     * Extract the first JSON object or array found in a string.
+     * Returns associative array on success or null on failure.
+     */
+    private function extractFirstJson(string $text): ?array
+    {
+        $start = null;
+        $stack = [];
+        $len = strlen($text);
+
+        for ($i = 0; $i < $len; $i++) {
+            $char = $text[$i];
+            if ($char === '{' || $char === '[') {
+                if (empty($stack)) {
+                    $start = $i;
+                }
+                $stack[] = $char;
+            } elseif ($char === '}' || $char === ']') {
+                if (empty($stack)) {
+                    continue;
+                }
+                $last = array_pop($stack);
+                if (($last === '{' && $char !== '}') || ($last === '[' && $char !== ']')) {
+                    $stack = [];
+                    $start = null;
+                    continue;
+                }
+                if (empty($stack) && $start !== null) {
+                    $jsonText = substr($text, $start, $i - $start + 1);
+                    $decoded = json_decode($jsonText, true);
+                    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                        return $decoded;
+                    }
+                    $start = null;
+                }
+            }
+        }
+
+        $decoded = json_decode($text, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            return $decoded;
+        }
+
+        return null;
     }
 }

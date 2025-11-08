@@ -19,6 +19,13 @@ Route::middleware(['auth', 'role:job_seeker'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    // Test OpenAI connection
+    Route::get(uri: '/test-openai', action: [JobVacancyController::class, 'testOpenAI'])->name(name: 'test-openai');
+
+
+
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
