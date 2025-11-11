@@ -95,24 +95,24 @@ class JobVacancyController extends Controller
         return redirect()->route('job-applications.index', $id)->with('success', 'Application submitted successfully');
     }
 
-    public function testOpenAI()
-    {
-        try {
-            $response = OpenAI::chat()->create([
-                'model' => 'gpt-4o',
-                'messages' => [
-                    [
-                        'role' => 'user',
-                        'content' => 'Say hello in JSON like {"hello":"world"}'
-                    ]
-                ]
-            ]);
+    // public function testOpenAI()
+    // {
+    //     try {
+    //         $response = OpenAI::chat()->create([
+    //             'model' => 'gpt-4o',
+    //             'messages' => [
+    //                 [
+    //                     'role' => 'user',
+    //                     'content' => 'Say hello in JSON like {"hello":"world"}'
+    //                 ]
+    //             ]
+    //         ]);
 
-            return $response->choices[0]->message->content;
-        } catch (\Exception $e) {
-            return 'Error: ' . $e->getMessage();
-        }
-    }
+    //         return $response->choices[0]->message->content;
+    //     } catch (\Exception $e) {
+    //         return 'Error: ' . $e->getMessage();
+    //     }
+    // }
 
  
 }
