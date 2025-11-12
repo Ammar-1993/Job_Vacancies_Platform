@@ -114,5 +114,28 @@ class JobVacancyController extends Controller
     //     }
     // }
 
+
+
+
+
+public function testOpenAI(): void
+{
+    $result = OpenAI::chat()->create(parameters: [
+        'model' => 'gpt-5-mini',
+        'messages' => [
+            [
+                'role'    => 'system',
+                'content' => 'You are an HR manager.',
+            ],
+            [
+                'role'    => 'user',
+                'content' => 'Hello!',
+            ],
+        ],
+    ]);
+
+    echo $result->choices[0]->message->content; // Example output: "Hello! How can I assist you today?
+}
+
  
 }

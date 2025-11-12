@@ -24,6 +24,10 @@ Route::middleware(['auth', 'role:job_seeker'])->group(function () {
     // Test OpenAI connection
     // Route::get(uri: '/test-openai', action: [JobVacancyController::class, 'testOpenAI'])->name(name: 'test-openai');
 
+    // TEST OPEN AI
+    Route::get(uri: '/test-openai', action: [JobVacancyController::class, 'testOpenAI'])->name(name: 'test-openai');
+
+
 
 
 });
