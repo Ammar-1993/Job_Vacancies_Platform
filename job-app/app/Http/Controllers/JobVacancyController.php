@@ -121,7 +121,7 @@ class JobVacancyController extends Controller
 public function testOpenAI(): void
 {
     $result = OpenAI::chat()->create(parameters: [
-        'model' => 'gpt-5-mini',
+        'model' => 'gpt-4o',
         'messages' => [
             [
                 'role'    => 'system',
