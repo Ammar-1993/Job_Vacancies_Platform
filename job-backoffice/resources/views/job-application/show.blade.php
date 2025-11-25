@@ -10,7 +10,8 @@
 
         <!-- Back Button -->
         <div class="mb-6">
-            <a href="{{ route('job-applications.index') }}" class="bg-gray-200 text-gray-800 hover:bg-gray-300 px-4 py-2 rounded-md">← Back</a>
+            <a href="{{ route('job-applications.index') }}"
+                class="bg-gray-200 text-gray-800 hover:bg-gray-300 px-4 py-2 rounded-md">← Back</a>
         </div>
 
         <!-- Wrapper -->
@@ -21,16 +22,20 @@
                 <p><strong>Applicant:</strong> {{ $jobApplication->user->name }}</p>
                 <p><strong>Job Vacancy:</strong> {{ $jobApplication->jobVacancy->title }}</p>
                 <p><strong>Company:</strong> {{ $jobApplication->jobVacancy->company->name }}</p>
-                <p><strong>Status:</strong> <span class="@if($jobApplication->status == 'accepted') text-green-500 @elseif($jobApplication->status == 'rejected') text-red-500 @else text-purple-500 @endif">{{ $jobApplication->status }} </span></p>
+                <p><strong>Status:</strong> <span
+                        class="@if($jobApplication->status == 'accepted') text-green-500 @elseif($jobApplication->status == 'rejected') text-red-500 @else text-purple-500 @endif">{{ $jobApplication->status }}
+                    </span></p>
                 <p><strong>Resume:</strong> <a class="text-blue-500 hover:text-blue-700 underline"
-                        href="{{ $jobApplication->resume->fileUri }}" target="_blank">{{ $jobApplication->resume->fileUri }}</a></p>
+                        href="{{ $jobApplication->resume->fileUri }}"
+                        target="_blank">{{ $jobApplication->resume->fileUri }}</a></p>
             </div>
 
             <!-- Edit and Archive Buttons -->
             <div class="flex justify-end space-x-4 mb-6">
                 <a href="{{ route('job-applications.edit', ['job_application' => $jobApplication->id, 'redirectToList' => 'false']) }}"
                     class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Edit</a>
-                <form action="{{ route('job-applications.destroy', ['job_application' => $jobApplication->id]) }}" method="POST" class="inline-block">
+                <form action="{{ route('job-applications.destroy', ['job_application' => $jobApplication->id]) }}"
+                    method="POST" class="inline-block">
                     @csrf
                     @method('DELETE')
                     <button type="submit"
@@ -47,7 +52,8 @@
                     </li>
                     <li>
                         <a href="{{ route('job-applications.show', ['job_application' => $jobApplication->id, 'tab' => 'AIFeedback']) }}"
-                            class="px-4 py-2 text-gray-800 font-semibold {{ request('tab') == 'AIFeedback' ? 'border-b-2 border-blue-500' : '' }}">AI Feedback</a>
+                            class="px-4 py-2 text-gray-800 font-semibold {{ request('tab') == 'AIFeedback' ? 'border-b-2 border-blue-500' : '' }}">AI
+                            Feedback</a>
                     </li>
                 </ul>
             </div>

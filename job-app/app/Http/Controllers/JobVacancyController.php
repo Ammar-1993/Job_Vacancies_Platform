@@ -95,47 +95,27 @@ class JobVacancyController extends Controller
         return redirect()->route('job-applications.index', $id)->with('success', 'Application submitted successfully');
     }
 
-    // public function testOpenAI()
-    // {
-    //     try {
-    //         $response = OpenAI::chat()->create([
-    //             'model' => 'gpt-4o',
-    //             'messages' => [
-    //                 [
-    //                     'role' => 'user',
-    //                     'content' => 'Say hello in JSON like {"hello":"world"}'
-    //                 ]
-    //             ]
-    //         ]);
-
-    //         return $response->choices[0]->message->content;
-    //     } catch (\Exception $e) {
-    //         return 'Error: ' . $e->getMessage();
-    //     }
-    // }
 
 
 
+// public function testOpenAI(): void
+// {
+//     $result = OpenAI::chat()->create(parameters: [
+//         'model' => 'gpt-4o',
+//         'messages' => [
+//             [
+//                 'role'    => 'system',
+//                 'content' => 'You are an HR manager.',
+//             ],
+//             [
+//                 'role'    => 'user',
+//                 'content' => 'Hello!',
+//             ],
+//         ],
+//     ]);
 
-
-public function testOpenAI(): void
-{
-    $result = OpenAI::chat()->create(parameters: [
-        'model' => 'gpt-4o',
-        'messages' => [
-            [
-                'role'    => 'system',
-                'content' => 'You are an HR manager.',
-            ],
-            [
-                'role'    => 'user',
-                'content' => 'Hello!',
-            ],
-        ],
-    ]);
-
-    echo $result->choices[0]->message->content; // Example output: "Hello! How can I assist you today?
-}
+//     echo $result->choices[0]->message->content; // Example output: "Hello! How can I assist you today?
+// }
 
  
 }

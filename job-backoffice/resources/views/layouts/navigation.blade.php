@@ -19,7 +19,7 @@
             </x-nav-link>
         @endif
 
-        @if (auth()->user()->role == 'company_owner')
+        @if (auth()->user()->role == 'company-owner')
             <x-nav-link :href="route('my-company.show')" :active="request()->routeIs('my-company.show')">
                 My Company
             </x-nav-link>

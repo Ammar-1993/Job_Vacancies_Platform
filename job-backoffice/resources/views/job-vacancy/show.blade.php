@@ -18,7 +18,7 @@
             <!-- Company Details -->
             <div>
                 <h3 class="text-lg font-bold">Job Vacancy Information</h3>
-                <p><strong>Company:</strong> {{ $jobVacancy->company->name }}</p>
+                <p><strong>Company:</strong> {{ optional($jobVacancy->company)->name ?? 'N/A' }}</p>
                 <p><strong>Location:</strong> {{ $jobVacancy->location }}</p>
                 <p><strong>Type:</strong> {{ $jobVacancy->type }}</p>
                 <p><strong>Salary:</strong> ${{number_format($jobVacancy->salary, 2)  }}</p>
@@ -64,8 +64,8 @@
                         <tbody>
                             @forelse ($jobVacancy->jobApplications as $application)
                                 <tr>
-                                    <td class="py-2 px-4">{{ $application->user->name }}</td>
-                                    <td class="py-2 px-4">{{ $application->jobVacancy->title }}</td>
+                                    <td class="py-2 px-4">{{ optional($application->user)->name ?? 'N/A' }}</td>
+                                    <td class="py-2 px-4">{{ optional($application->jobVacancy)->title ?? 'N/A' }}</td>
                                     <td class="py-2 px-4">{{ $application->status }}</td>
                                     <td class="py-2 px-4">
                                         <a href="{{ route('job-applications.show', $application->id) }}" class="text-blue-500 hover:text-blue-700 underline">View</a>

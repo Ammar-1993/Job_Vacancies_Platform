@@ -21,8 +21,12 @@
             <!-- Company Details -->
             <div>
                 <h3 class="text-lg font-bold">Company Information</h3>
-                <p><strong>Owner:</strong> {{ $company->owner->name }}</p>
-                <p><strong>Email:</strong> {{ $company->owner->email }}</p>
+                <p><strong>Owner:</strong> {{ optional($company->owner)->name ?? 'N/A' }}</p>
+                @if(optional($company->owner)->email)
+                    <p><strong>Email:</strong> <a class="text-blue-500 hover:text-blue-700 underline" href="mailto:{{ optional($company->owner)->email }}">{{ optional($company->owner)->email }}</a></p>
+                @else
+                    <p><strong>Email:</strong> N/A</p>
+                @endif
                 <p><strong>Address:</strong> {{ $company->address }}</p>
                 <p><strong>Industry:</strong> {{ $company->industry }}</p>
                 <p><strong>Website:</strong> <a class="text-blue-500 hover:text-blue-700 underline"
@@ -111,8 +115,8 @@
                                     @if ($company->jobApplications && $company->jobApplications->count())
                                         @foreach ($company->jobApplications as $application)
                                         <tr>
-                                            <td class="py-2 px-4">{{ $application->user->name }}</td>
-                                            <td class="py-2 px-4">{{ $application->jobVacancy->title }}</td>
+                                            <td class="py-2 px-4">{{ optional($application->user)->name ?? 'N/A' }}</td>
+                                            <td class="py-2 px-4">{{ optional($application->jobVacancy)->title ?? 'N/A' }}</td>
                                             <td class="py-2 px-4">{{ $application->status }}</td>
                                             <td class="py-2 px-4">
                                                 <a href="{{ route('job-applications.show', $application->id) }}"

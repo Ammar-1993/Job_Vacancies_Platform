@@ -18,12 +18,12 @@ class ResumeAnalysisService
             Log::debug('Successfully extracted text from pdf file' . strlen($rawText) . ' characters');
 
             // Use OpenAI API to organize the text into a structured format
-            $response = $this->callOpenAiWithRetries([
-                'model' => 'gpt-4o',
+                $response = $this->callOpenAiWithRetriesAndFallback([
+                    // model will be set by the fallback caller
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => 'You are a precise resume parser. Extract information exactly as it appears in the resume without adding any interpretation or additional information. The output should be in JSON format.'
+                            'content' => 'You are a precise resume parser. Extract information exactly as it appears in the resume without adding any interpretation or additional information. The output should be in JSON format.'
                     ],
                     [
                         'role' => 'user',
@@ -34,7 +34,7 @@ class ResumeAnalysisService
                     'type' => 'json_object'
                 ],
                 'temperature' => 0.1  // Sets the randomness of the AI response to 0, making it deterministic and focused on the most likely completion
-            ]);
+                ], ['gpt-4o', 'gpt-4', 'gpt-3.5-turbo']);
 
             $result = $response->choices[0]->message->content;
             Log::debug('OpenAI response: ' . $result);
@@ -85,8 +85,8 @@ class ResumeAnalysisService
 
             $resumeDetails = json_encode($resumeData);
 
-            $response = OpenAI::chat()->create([
-                'model' => 'gpt-4o',
+            $response = $this->callOpenAiWithRetriesAndFallback([
+                // model will be set by the fallback caller
                 'messages' => [
                     [
                         'role' => 'system',
@@ -106,15 +106,15 @@ class ResumeAnalysisService
                     'type' => 'json_object'
                 ],
                 'temperature' => 0.1
-            ]);
+            ], ['gpt-4o', 'gpt-4', 'gpt-3.5-turbo']);
 
             $result = $response->choices[0]->message->content;
             Log::debug('OpenAI evaluationresponse: ' . $result);
 
-            $parsedResult = json_decode($result, true);
+            $parsedResult = $this->extractFirstJson($result);
 
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                Log::error('Failed to parse OpenAI response: ' . json_last_error_msg());
+            if ($parsedResult === null) {
+                Log::error('Failed to parse OpenAI response: unable to find valid JSON in response');
                 throw new \Exception('Failed to parse OpenAI response');
             }
 
@@ -213,12 +213,60 @@ class ResumeAnalysisService
                     throw $e;
                 }
 
-                sleep($backoffSeconds);
+                // jittered backoff: base seconds + random milliseconds
+                $jitterMs = rand(0, 500);
+                $sleepMicro = ($backoffSeconds * 1000000) + ($jitterMs * 1000);
+                usleep($sleepMicro);
                 $backoffSeconds *= 2;
             }
         }
 
         throw new \RuntimeException('OpenAI request failed after retries');
+    }
+
+    /**
+     * Try a list of models as fallback. For each model, call the retrying requester.
+     */
+    private function callOpenAiWithRetriesAndFallback(array $payload, array $models)
+    {
+        $lastException = null;
+
+        foreach ($models as $model) {
+            $payload['model'] = $model;
+            try {
+                Log::info("Trying OpenAI model: {$model}");
+                return $this->callOpenAiWithRetries($payload);
+            } catch (\Throwable $e) {
+                $lastException = $e;
+                $msg = strtolower($e->getMessage() ?? '');
+                $code = (int) $e->getCode();
+
+                $isRateLimit = ($code === 429) || str_contains($msg, 'rate limit') || str_contains($msg, 'too many requests');
+                $isModelNotFound = str_contains($msg, 'model') && (str_contains($msg, 'not found') || str_contains($msg, 'does not exist') || str_contains($msg, 'is not available') || str_contains($msg, 'unknown model'));
+
+                Log::warning("Model {$model} failed: {$e->getMessage()}");
+
+                if ($isModelNotFound) {
+                    // try next model immediately
+                    continue;
+                }
+
+                if ($isRateLimit) {
+                    // wait a little before trying the next model
+                    sleep(1);
+                    continue;
+                }
+
+                // for other errors, break and rethrow after loop
+                break;
+            }
+        }
+
+        if ($lastException) {
+            throw $lastException;
+        }
+
+        throw new \RuntimeException('OpenAI request failed using all fallback models');
     }
 
     /**
