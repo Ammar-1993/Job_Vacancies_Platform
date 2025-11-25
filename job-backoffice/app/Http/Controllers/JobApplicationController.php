@@ -31,7 +31,10 @@ class JobApplicationController extends Controller
         if ($request->input('archived') == 'true') {
             $query->onlyTrashed();
         }
-        
+
+        // Eager load relations to avoid N+1 and ensure related models are available in the view
+        $query->with(['user', 'jobVacancy.company']);
+
         $jobApplications = $query->paginate(10)->onEachSide(1);
         return view('job-application.index', compact('jobApplications'));
     }

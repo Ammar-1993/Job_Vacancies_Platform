@@ -42,10 +42,16 @@
                 @forelse ($jobApplications as $jobApplication)
                     <tr class="border-b">
                         <td class="px-6 py-4 text-gray-800">
-                            @if(request()->input('archived') == 'true')
-                                <span class="text-gray-500">{{ $jobApplication->user->name }}</span>
+                            @php $applicant = $jobApplication->user; @endphp
+                            @if($applicant)
+                                @php $applicantName = $applicant->name ?? 'Unknown'; @endphp
+                                @if(request()->input('archived') == 'true')
+                                    <span class="text-gray-500">{{ $applicantName }}@if(isset($applicant->deleted_at) && $applicant->deleted_at) <span class="ml-2 text-xs text-red-500" title="User record soft-deleted">(deleted)</span>@endif</span>
+                                @else
+                                    <a class="text-blue-500 hover:text-blue-700 underline" href="{{ route('job-applications.show', $jobApplication->id) }}">{{ $applicantName }}</a>
+                                @endif
                             @else
-                                <a class="text-blue-500 hover:text-blue-700 underline" href="{{ route('job-applications.show', $jobApplication->id) }}">{{ $jobApplication->user->name }}</a>
+                                <span class="text-gray-500" title="Applicant user not found or deleted">User deleted</span>
                             @endif
                         </td>
                         <td class="px-6 py-4 text-gray-800">{{ $jobApplication->jobVacancy?->title ?? 'N/A' }}</td>
