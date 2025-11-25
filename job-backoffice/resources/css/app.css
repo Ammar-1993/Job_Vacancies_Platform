@@ -1,3 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer base {
+	/* Provide a clear focus ring for keyboard users on anchors and buttons */
+	a:focus,
+	button:focus,
+	input:focus,
+	textarea:focus,
+	[role="button"]:focus {
+		/* Replaced Tailwind @apply with equivalent CSS so this file can be processed without Tailwind/PostCSS */
+		outline: none;
+		box-shadow: 0 0 0 2px rgba(79,70,229,1); /* approximates ring-indigo-500 */
+		outline-offset: 2px; /* approximates ring-offset-2 */
+	}
+
+	/* Increase default link color slightly for contrast (where utility classes not applied) */
+	a {
+		color: inherit;
+	}
+}
