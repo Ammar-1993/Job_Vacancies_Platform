@@ -31,7 +31,7 @@
         </div>
 
 
-        <!-- Job Category Table -->
+        <!-- Companies Table -->
         <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow mt-4 bg-white">
             <thead>
                 <tr>
@@ -44,8 +44,8 @@
             </thead>
             <tbody>
                 @forelse ($companies as $company)
-                    <tr class="border-b" @if(request()->input('archived') != 'true') data-href="{{ route('companies.show', $company->id) }}" tabindex="0" role="link" aria-label="Open {{ $company->name }}" @endif>
-                        <td class="px-6 py-4 text-gray-800">
+                    <tr class="border-b hover:bg-gray-50 focus:bg-gray-50 cursor-pointer focus:outline-none" @if(request()->input('archived') != 'true') data-href="{{ route('companies.show', $company->id) }}" tabindex="0" role="link" aria-label="Open {{ $company->name }}" @endif>
+                        <td class="px-6 py-4 text-gray-800 max-w-xs truncate">
                             @if(request()->input('archived') == 'true')
                                 <span class="text-gray-500">{{ $company->name }}</span>
                             @else
@@ -54,28 +54,34 @@
                         </td>
                         <td class="px-6 py-4 text-gray-800">{{ $company->address }}</td>
                         <td class="px-6 py-4 text-gray-800">{{ $company->industry }}</td>
-                        <td class="px-6 py-4 text-gray-800">{{ $company->website }}</td>
-                        <td>
-                            <div class="flex space-x-4">
+                        <td class="px-6 py-4 text-gray-800 max-w-md truncate">{{ $company->website }}</td>
+                        <td class="px-6 py-4 text-right">
+                            <div class="inline-flex items-center space-x-4">
                                 @if(request()->input('archived') == 'true')
                                     <!-- Restore Button -->
-                                    <form action="{{ route('companies.restore', $company->id) }}" method="POST"
-                                        class="inline-block">
+                                    <form action="{{ route('companies.restore', $company->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="text-green-500 hover:text-green-700">🔄 Restore</button>
+                                        <button type="submit" class="inline-flex items-center space-x-1 text-sm text-green-500 hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300">
+                                            <span>🔄</span>
+                                            <span>Restore</span>
+                                        </button>
                                     </form>
                                 @else
                                     <!-- Edit Button -->
-                                    <a href="{{ route('companies.edit', $company->id) }}"
-                                        class="text-blue-500 hover:text-blue-700">✍️ Edit</a>
+                                    <a href="{{ route('companies.edit', $company->id) }}" class="inline-flex items-center space-x-1 text-sm text-blue-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-200">
+                                        <span>✍️</span>
+                                        <span>Edit</span>
+                                    </a>
 
                                     <!-- Archive Button -->
-                                    <form action="{{ route('companies.destroy', $company->id) }}" method="POST"
-                                        class="inline-block">
+                                    <form action="{{ route('companies.destroy', $company->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700">🗃️ Archive</button>
+                                        <button type="submit" class="inline-flex items-center space-x-1 text-sm text-red-500 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-200">
+                                            <span>🗃️</span>
+                                            <span>Archive</span>
+                                        </button>
                                     </form>
                                 @endif
                             </div>

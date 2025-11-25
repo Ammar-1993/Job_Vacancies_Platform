@@ -56,7 +56,13 @@
                             @endif
                         </td>
                         @if(auth()->user()->role == 'admin')
-                            <td class="px-6 py-4 text-gray-800">{{ $jobVacancy->company->name }}</td>
+                            <td class="px-6 py-4 text-gray-800">
+                                @if($jobVacancy->company)
+                                    {{ $jobVacancy->company->name }}
+                                @else
+                                    <span class="text-sm text-gray-500">Company deleted</span>
+                                @endif
+                            </td>
                         @endif
                         <td class="px-6 py-4 text-gray-800">{{ $jobVacancy->location }}</td>
                         <td class="px-6 py-4 text-gray-800">{{ $jobVacancy->type }}</td>

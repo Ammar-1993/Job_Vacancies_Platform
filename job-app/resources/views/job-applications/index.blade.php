@@ -16,24 +16,37 @@
         <div class="bg-black shadow-lg rounded-lg p-6 max-w-7xl mx-auto space-y-4">
             @forelse ($jobApplications as $jobApplication)
                 <div class="bg-gray-900 p-4 rounded-lg">
-                    <h3 class="text-white text-lg font-bold">{{ $jobApplication->jobVacancy->title }}</h3>
-                    <p class="text-sm">{{ $jobApplication->jobVacancy->company->name }}</p>
-                    <p class="text-xs">{{ $jobApplication->jobVacancy->location }}</p>
+                    <h3 class="text-white text-lg font-bold">{{ $jobApplication->jobVacancy?->title ?? 'Job removed' }}</h3>
+                    <p class="text-sm">
+                        @if(isset($jobApplication->jobVacancy) && $jobApplication->jobVacancy && isset($jobApplication->jobVacancy->company) && $jobApplication->jobVacancy->company)
+                            {{ $jobApplication->jobVacancy->company->name }}
+                        @else
+                            <span class="text-sm text-gray-400">Company deleted</span>
+                        @endif
+                    </p>
+                    <p class="text-xs">{{ $jobApplication->jobVacancy->location ?? '' }}</p>
 
 
                     <div class="flex items-center justify-between">
                         <p class="text-sm">{{ $jobApplication->created_at->format('d M Y') }}</p>
-                        <p class="px-3 py-1 bg-blue-600 text-white rounded-md">{{ $jobApplication->jobVacancy->type }}</p>
+                        @if(isset($jobApplication->jobVacancy) && $jobApplication->jobVacancy && isset($jobApplication->jobVacancy->type))
+                            <p class="px-3 py-1 bg-blue-600 text-white rounded-md">{{ $jobApplication->jobVacancy->type }}</p>
+                        @else
+                            <p class="px-3 py-1 bg-gray-600 text-white rounded-md">—</p>
+                        @endif
                     </div>
 
-                    <div class="flex items-center gap-2">
-                        <span>Applied With: {{ $jobApplication->resume->filename }}</span>
+                        <div class="flex items-center gap-2">
+                        <span>Applied With: {{ $jobApplication->resume->filename ?? '—' }}</span>
                         @php
                             /** @var \Illuminate\Filesystem\FilesystemAdapter $cloudDisk */
                             $cloudDisk = Storage::disk('cloud');
                         @endphp
-                        <a href="{{ $cloudDisk->url($jobApplication->resume->fileUri) }}" target="_blank"
-                            class="text-indigo-500 hover:text-indigo-600">View Resume</a>
+                        @if(isset($jobApplication->resume) && $jobApplication->resume && $jobApplication->resume->fileUri)
+                            <a href="{{ $cloudDisk->url($jobApplication->resume->fileUri) }}" target="_blank" class="text-indigo-500 hover:text-indigo-600">View Resume</a>
+                        @else
+                            <span class="text-gray-400">No resume file</span>
+                        @endif
                     </div>
 
                     <div class="flex flex-start flex-col gap-2 mt-4">

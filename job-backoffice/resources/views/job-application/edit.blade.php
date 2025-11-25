@@ -18,17 +18,29 @@
                     <h3 class="text-lg font-bold">Job Application Details</h3>
                     <div class="mb-4">
                         <label for="title" class="block text-sm font-medium text-gray-700">Applicant Name</label>
-                        <span>{{ $jobApplication->user->name }}</span>
+                        @if($jobApplication->user)
+                            <span>{{ $jobApplication->user->name }}</span>
+                        @else
+                            <span class="text-sm text-gray-500">User deleted</span>
+                        @endif
                     </div>
 
                     <div class="mb-4">
                         <label for="title" class="block text-sm font-medium text-gray-700">Job Vacancy</label>
-                        <span>{{ $jobApplication->jobVacancy->title }}</span>
+                        @if($jobApplication->jobVacancy)
+                            <span>{{ $jobApplication->jobVacancy->title }}</span>
+                        @else
+                            <span class="text-sm text-gray-500">Job removed</span>
+                        @endif
                     </div>
 
                     <div class="mb-4">
                         <label for="title" class="block text-sm font-medium text-gray-700">Company</label>
-                        <span>{{ $jobApplication->jobVacancy->company->name }}</span>
+                        @if($jobApplication->jobVacancy && $jobApplication->jobVacancy->company)
+                            <span>{{ $jobApplication->jobVacancy->company->name }}</span>
+                        @else
+                            <span class="text-sm text-gray-500">Company deleted</span>
+                        @endif
                     </div>
 
                     <div class="mb-4">

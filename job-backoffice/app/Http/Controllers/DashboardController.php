@@ -32,7 +32,7 @@ class DashboardController extends Controller
         $totalApplications = JobApplication::whereNull('deleted_at')->count();
 
         // Most applied jobs
-        $mostAppliedJobs = JobVacancy::withCount('jobApplications as totalCount')
+        $mostAppliedJobs = JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
             ->whereNull('deleted_at')
             ->limit(5)
             ->orderByDesc('totalCount')
@@ -40,7 +40,7 @@ class DashboardController extends Controller
 
 
         // Conversion rates
-        $conversionRates = JobVacancy::withCount('jobApplications as totalCount')
+        $conversionRates = JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
             ->having('totalCount', '>', 0)
             ->limit(5)
             ->orderByDesc('totalCount')
@@ -100,14 +100,14 @@ class DashboardController extends Controller
         $totalApplications = JobApplication::whereIn('jobVacancyId', $company->jobVacancies->pluck('id'))->count();
         
         // most applied jobs of the company
-        $mostAppliedJobs = JobVacancy::withCount('jobApplications as totalCount')
+        $mostAppliedJobs = JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
             ->whereIn('id', $company->jobVacancies->pluck('id'))
             ->limit(5)
             ->orderByDesc('totalCount')
             ->get();
 
         // conversion rates of the company
-        $conversionRates = JobVacancy::withCount('jobApplications as totalCount')
+        $conversionRates = JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
             ->whereIn('id', $company->jobVacancies->pluck('id'))
             ->having('totalCount', '>', 0)
             ->limit(5)

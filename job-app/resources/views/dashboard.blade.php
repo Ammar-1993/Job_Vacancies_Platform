@@ -56,7 +56,13 @@
                         <div>
                             <a href="{{ route('job-vacancies.show', $job->id) }}"
                                 class="text-lg font-semibold text-blue-400 hover:underline">{{ $job->title }}</a>
-                            <p class="text-sm text-white">{{ $job->company->name }} - {{ $job->location }}</p>
+                            <p class="text-sm text-white">
+                                @if(isset($job->company) && $job->company)
+                                    {{ $job->company->name }} - {{ $job->location }}
+                                @else
+                                    <span class="text-sm text-gray-300">Company deleted - {{ $job->location }}</span>
+                                @endif
+                            </p>
                             <p class="text-sm text-white">{{ '$' . number_format($job->salary) }} / Year</p>
                         </div>
                         <span class="bg-blue-500 text-white p-2 rounded-lg">{{ $job->type }}</span>

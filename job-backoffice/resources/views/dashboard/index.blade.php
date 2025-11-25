@@ -8,23 +8,9 @@
     <div class="py-12 px-6 flex flex-col gap-4">
         <!-- Overview Cards -->
         <div class="grid grid-cols-3 gap-4">
-            <div class="p-6 bg-white overflow-hidden shadow-sm rounded-lg">
-                <h3 class="text-lg font-medium text-gray-900">Active Users</h3>
-                <p class="text-3xl font-bold text-indigo-600">{{ $analytics['activeUsers'] }}</p>
-                <p class="text-sm text-gray-500">Last 30 days</p>
-            </div>
-
-            <div class="p-6 bg-white overflow-hidden shadow-sm rounded-lg">
-                <h3 class="text-lg font-medium text-gray-900">Total Jobs</h3>
-                <p class="text-3xl font-bold text-indigo-600">{{ $analytics['totalJobs'] }}</p>
-                <p class="text-sm text-gray-500">All time</p>
-            </div>
-
-            <div class="p-6 bg-white overflow-hidden shadow-sm rounded-lg">
-                <h3 class="text-lg font-medium text-gray-900">Total Applications</h3>
-                <p class="text-3xl font-bold text-indigo-600">{{ $analytics['totalApplications'] }}</p>
-                <p class="text-sm text-gray-500">All time</p>
-            </div>
+            <x-metric-card title="Active Users" :value="$analytics['activeUsers']" subtitle="Last 30 days" color="indigo-600" />
+            <x-metric-card title="Total Jobs" :value="$analytics['totalJobs']" subtitle="All time" color="indigo-600" />
+            <x-metric-card title="Total Applications" :value="$analytics['totalApplications']" subtitle="All time" color="indigo-600" />
         </div>
 
         <!-- Most Applied Jobs -->
@@ -46,7 +32,13 @@
                             <tr>
                                 <td class="py-4">{{ $job->title }}</td>
                                 @if(auth()->user()->role == 'admin')
-                                    <td class="py-4">{{ $job->company->name }}</td>
+                                    <td class="py-4">
+                                        @if($job->company)
+                                            {{ $job->company->name }}
+                                        @else
+                                            <span class="text-sm text-gray-500">Company deleted</span>
+                                        @endif
+                                    </td>
                                 @endif
                                 <td class="py-4">{{ $job->totalCount }}</td>
                             </tr>
@@ -76,7 +68,7 @@
                                 <td class="py-4">{{ $conversionRate->title }}</td>
                                 <td class="py-4">{{ $conversionRate->viewCount }}</td>
                                 <td class="py-4">{{ $conversionRate->totalCount }}</td>
-                                <td class="py-4">{{ $conversionRate->conversionRate }}%</td>
+                                <td class="py-4"><x-status-badge :value="$conversionRate->conversionRate" /></td>
                             </tr>
                         @endforeach
                         </tr>

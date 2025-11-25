@@ -16,7 +16,13 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h1 class="text-2xl font-bold text-white">{{ $jobVacancy->title }}</h1>
-                        <p class="text-md text-gray-400">{{ $jobVacancy->company->name }}</p>
+                        <p class="text-md text-gray-400">
+                            @if(isset($jobVacancy->company) && $jobVacancy->company)
+                                {{ $jobVacancy->company->name }}
+                            @else
+                                <span class="text-gray-400">Company deleted</span>
+                            @endif
+                        </p>
                         <div class="flex items-center gap-2">
                             <p class="text-sm text-gray-400">{{ $jobVacancy->location }}</p>
                             <p class="text-sm text-gray-400">•</p>

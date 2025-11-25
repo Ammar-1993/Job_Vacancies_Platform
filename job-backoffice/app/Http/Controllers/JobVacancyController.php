@@ -28,6 +28,9 @@ class JobVacancyController extends Controller
             }
         }
 
+        // Eager-load company (include soft-deleted companies) to avoid null relation errors
+        $query->with(['company' => function($q) { $q->withTrashed(); }]);
+
         // Archived
         if ($request->input('archived') == 'true') {
             $query->onlyTrashed();

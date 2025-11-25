@@ -1,7 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $jobApplication->user->name }} | Applied to {{ $jobApplication->jobVacancy->title }}
+            @if($jobApplication->user)
+                {{ $jobApplication->user->name }}
+            @else
+                <span class="text-sm text-gray-500">User deleted</span>
+            @endif
+            | Applied to
+            @if($jobApplication->jobVacancy)
+                {{ $jobApplication->jobVacancy->title }}
+            @else
+                <span class="text-sm text-gray-500">Job removed</span>
+            @endif
         </h2>
     </x-slot>
 
@@ -19,15 +29,37 @@
             <!-- Application Details -->
             <div>
                 <h3 class="text-lg font-bold">Application Details</h3>
-                <p><strong>Applicant:</strong> {{ $jobApplication->user->name }}</p>
-                <p><strong>Job Vacancy:</strong> {{ $jobApplication->jobVacancy->title }}</p>
-                <p><strong>Company:</strong> {{ $jobApplication->jobVacancy->company->name }}</p>
+                <p><strong>Applicant:</strong>
+                    @if($jobApplication->user)
+                        {{ $jobApplication->user->name }}
+                    @else
+                        <span class="text-sm text-gray-500">User deleted</span>
+                    @endif
+                </p>
+                <p><strong>Job Vacancy:</strong>
+                    @if($jobApplication->jobVacancy)
+                        {{ $jobApplication->jobVacancy->title }}
+                    @else
+                        <span class="text-sm text-gray-500">Job removed</span>
+                    @endif
+                </p>
+                <p><strong>Company:</strong>
+                    @if($jobApplication->jobVacancy && $jobApplication->jobVacancy->company)
+                        {{ $jobApplication->jobVacancy->company->name }}
+                    @else
+                        <span class="text-sm text-gray-500">Company deleted</span>
+                    @endif
+                </p>
                 <p><strong>Status:</strong> <span
                         class="@if($jobApplication->status == 'accepted') text-green-500 @elseif($jobApplication->status == 'rejected') text-red-500 @else text-purple-500 @endif">{{ $jobApplication->status }}
                     </span></p>
-                <p><strong>Resume:</strong> <a class="text-blue-500 hover:text-blue-700 underline"
-                        href="{{ $jobApplication->resume->fileUri }}"
-                        target="_blank">{{ $jobApplication->resume->fileUri }}</a></p>
+                <p><strong>Resume:</strong>
+                    @if($jobApplication->resume && $jobApplication->resume->fileUri)
+                        <a class="text-blue-500 hover:text-blue-700 underline" href="{{ $jobApplication->resume->fileUri }}" target="_blank">{{ $jobApplication->resume->fileUri }}</a>
+                    @else
+                        <span class="text-sm text-gray-500">No resume available</span>
+                    @endif
+                </p>
             </div>
 
             <!-- Edit and Archive Buttons -->
