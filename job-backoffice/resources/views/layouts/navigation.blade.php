@@ -3,7 +3,7 @@
     <div class="flex items-center px-6 border-b border-gray-200 py-4">
         <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
             <x-application-logo class="h-6 w-auto fill-current text-gray-800" />
-            <span class="text-lg font-semibold text-gray-800">Shaghalni</span>
+            <span class="text-lg font-semibold text-gray-800">Hire Me</span>
         </a>
     </div>
 
@@ -19,7 +19,7 @@
             </x-nav-link>
         @endif
 
-        @if (auth()->user()->role == 'company-owner')
+        @if (auth()->user()->role == 'company_owner')
             <x-nav-link :href="route('my-company.show')" :active="request()->routeIs('my-company.show')">
                 My Company
             </x-nav-link>
