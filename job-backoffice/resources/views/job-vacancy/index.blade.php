@@ -41,14 +41,14 @@
                     @endif
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Location</th>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Type</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Salary</th>
+                    <th class="px-6 py-3 text-right text-sm font-semibold text-gray-600">Salary</th>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($jobVacancies as $jobVacancy)
-                    <tr class="border-b">
-                        <td class="px-6 py-4 text-gray-800">
+                    <tr @if(request()->input('archived') != 'true') data-href="{{ route('job-vacancies.show', $jobVacancy->id) }}" tabindex="0" role="link" aria-label="Open {{ $jobVacancy->title }}" @endif class="border-b hover:bg-gray-50">
+                        <td class="px-6 py-4 text-gray-800 truncate max-w-xl">
                             @if(request()->input('archived') == 'true')
                                 <span class="text-gray-500">{{ $jobVacancy->title }}</span>
                             @else
@@ -60,28 +60,28 @@
                         @endif
                         <td class="px-6 py-4 text-gray-800">{{ $jobVacancy->location }}</td>
                         <td class="px-6 py-4 text-gray-800">{{ $jobVacancy->type }}</td>
-                        <td class="px-6 py-4 text-gray-800">${{number_format($jobVacancy->salary, 2)  }}</td>
+                        <td class="px-6 py-4 text-right text-gray-800">${{ number_format($jobVacancy->salary, 2) }}</td>
                         <td>
-                            <div class="flex space-x-4">
+                            <div class="flex items-center space-x-4">
                                 @if(request()->input('archived') == 'true')
                                     <!-- Restore Button -->
                                     <form action="{{ route('job-vacancies.restore', $jobVacancy->id) }}" method="POST"
                                         class="inline-block">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="text-green-500 hover:text-green-700">🔄 Restore</button>
+                                        <button type="submit" class="text-green-600 hover:text-green-800 text-sm">🔄 Restore</button>
                                     </form>
                                 @else
                                     <!-- Edit Button -->
                                     <a href="{{ route('job-vacancies.edit', $jobVacancy->id) }}"
-                                        class="text-blue-500 hover:text-blue-700">✍️ Edit</a>
+                                        class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">✍️ Edit</a>
 
                                     <!-- Archive Button -->
                                     <form action="{{ route('job-vacancies.destroy', $jobVacancy->id) }}" method="POST"
                                         class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700">🗃️ Archive</button>
+                                        <button type="submit" class="text-red-600 hover:text-red-800 text-sm">🗃️ Archive</button>
                                     </form>
                                 @endif
                             </div>

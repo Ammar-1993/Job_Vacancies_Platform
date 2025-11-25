@@ -44,7 +44,7 @@
             </thead>
             <tbody>
                 @forelse ($companies as $company)
-                    <tr class="border-b">
+                    <tr class="border-b" @if(request()->input('archived') != 'true') data-href="{{ route('companies.show', $company->id) }}" tabindex="0" role="link" aria-label="Open {{ $company->name }}" @endif>
                         <td class="px-6 py-4 text-gray-800">
                             @if(request()->input('archived') == 'true')
                                 <span class="text-gray-500">{{ $company->name }}</span>

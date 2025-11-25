@@ -40,7 +40,7 @@
             </thead>
             <tbody>
                 @forelse ($jobApplications as $jobApplication)
-                    <tr class="border-b">
+                    <tr @if(request()->input('archived') != 'true') data-href="{{ route('job-applications.show', $jobApplication->id) }}" tabindex="0" role="link" aria-label="Open application from {{ $jobApplication->user?->name ?? 'applicant' }}" @endif class="border-b hover:bg-gray-50">
                         <td class="px-6 py-4 text-gray-800">
                             @php $applicant = $jobApplication->user; @endphp
                             @if($applicant)
@@ -54,32 +54,32 @@
                                 <span class="text-gray-500" title="Applicant user not found or deleted">User deleted</span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 text-gray-800">{{ $jobApplication->jobVacancy?->title ?? 'N/A' }}</td>
+                        <td class="px-6 py-4 text-gray-800 truncate max-w-xl">{{ $jobApplication->jobVacancy?->title ?? 'N/A' }}</td>
                         @if(auth()->user()->role == 'admin')
                             <td class="px-6 py-4 text-gray-800">{{ $jobApplication->jobVacancy?->company?->name ?? 'N/A' }}</td>
                         @endif
-                        <td class="px-6 py-4 @if($jobApplication->status == 'accepted') text-green-500 @elseif($jobApplication->status == 'rejected') text-red-500 @else text-purple-500 @endif">{{ $jobApplication->status }}</td>
+                        <td class="px-6 py-4 @if($jobApplication->status == 'accepted') text-green-600 @elseif($jobApplication->status == 'rejected') text-red-600 @else text-purple-600 @endif">{{ $jobApplication->status }}</td>
                         <td>
-                            <div class="flex space-x-4">
+                            <div class="flex items-center space-x-4">
                                 @if(request()->input('archived') == 'true')
                                     <!-- Restore Button -->
                                     <form action="{{ route('job-applications.restore', $jobApplication->id) }}" method="POST"
                                         class="inline-block">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="text-green-500 hover:text-green-700">🔄 Restore</button>
+                                        <button type="submit" class="text-green-600 hover:text-green-800 text-sm">🔄 Restore</button>
                                     </form>
                                 @else
                                     <!-- Edit Button -->
                                     <a href="{{ route('job-applications.edit', $jobApplication->id) }}"
-                                        class="text-blue-500 hover:text-blue-700">✍️ Edit</a>
+                                        class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">✍️ Edit</a>
 
                                     <!-- Archive Button -->
                                     <form action="{{ route('job-applications.destroy', $jobApplication->id) }}" method="POST"
                                         class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700">🗃️ Archive</button>
+                                        <button type="submit" class="text-red-600 hover:text-red-800 text-sm">🗃️ Archive</button>
                                     </form>
                                 @endif
                             </div>

@@ -37,33 +37,32 @@
             </thead>
             <tbody>
                 @forelse ($users as $user)
-                    <tr class="border-b">
-                        <td class="px-6 py-4 text-gray-800">
-                            <span class="text-gray-500">{{ $user->name }}</span>
+                    <tr @if(request()->input('archived') != 'true' && $user->role != 'admin') data-href="{{ route('users.edit', $user->id) }}" tabindex="0" role="link" aria-label="Edit user {{ $user->name }}" @endif class="border-b hover:bg-gray-50">
+                        <td class="px-6 py-4 text-gray-800 truncate max-w-lg">
+                            <span class="text-gray-700">{{ $user->name }}</span>
                         </td>
-                        <td class="px-6 py-4 text-gray-800">{{ $user->email }}</td>
+                        <td class="px-6 py-4 text-gray-800 truncate">{{ $user->email }}</td>
                         <td class="px-6 py-4 text-gray-800">{{ $user->role }}</td>
                         <td>
-                            <div class="flex space-x-4">
+                            <div class="flex items-center space-x-4">
                                 @if(request()->input('archived') == 'true')
                                     <!-- Restore Button -->
                                     <form action="{{ route('users.restore', $user->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="text-green-500 hover:text-green-700">🔄 Restore</button>
+                                        <button type="submit" class="text-green-600 hover:text-green-800 text-sm">🔄 Restore</button>
                                     </form>
                                 @else
                                     <!-- If Admin don't allow edit or delete -->
                                     @if($user->role != 'admin')
                                         <!-- Edit Button -->
-                                        <a href="{{ route('users.edit', $user->id) }}" class="text-blue-500 hover:text-blue-700">✍️
-                                            Edit</a>
+                                        <a href="{{ route('users.edit', $user->id) }}" class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">✍️ Edit</a>
 
                                         <!-- Archive Button -->
                                         <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:text-red-700">🗃️ Archive</button>
+                                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm">🗃️ Archive</button>
                                         </form>
                                     @endif
                                 @endif
