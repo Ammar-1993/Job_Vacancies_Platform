@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\JobApplication;
 use App\Http\Requests\JobApplicationUpdateRequest;
+
 class JobApplicationController extends Controller
 {
     /**
@@ -12,9 +13,10 @@ class JobApplicationController extends Controller
      */
     public function index(Request $request)
     {
-        // Active
+        // Start Query
         $query = JobApplication::latest();
 
+        // 1. Role Check: Filter for Company Owners
         if (auth()->user()->role == 'company_owner') {
             $company = auth()->user()->company;
             if (! $company) {
@@ -27,15 +29,31 @@ class JobApplicationController extends Controller
             }
         }
 
-        // Archived
+        // 2. Search Logic (New)
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->whereHas('user', function ($q) use ($searchTerm) {
+                $q->where('name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('email', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        // 3. Status Filter Logic (New)
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // 4. Archived Check
         if ($request->input('archived') == 'true') {
             $query->onlyTrashed();
         }
 
-        // Eager load relations to avoid N+1 and ensure related models are available in the view
+        // Eager load relations to avoid N+1
         $query->with(['user', 'jobVacancy.company']);
 
-        $jobApplications = $query->paginate(10)->onEachSide(1);
+        // Pagination (Appending query parameters ensures filters persist across pages)
+        $jobApplications = $query->paginate(10)->onEachSide(1)->withQueryString();
+        
         return view('job-application.index', compact('jobApplications'));
     }
 

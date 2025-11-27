@@ -1,84 +1,154 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Users') }} {{ request()->input('archived') == 'true' ? '(Archived)' : '' }}
+            {{ __('Users Management') }}
         </h2>
     </x-slot>
 
-    <div class="overflow-x-auto p-6">
-        <x-toast-notification />
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <x-toast-notification />
 
-        <div class="flex justify-end items-center space-x-4">
-            @if(request()->input('archived') == 'true')
-                <!-- Active -->
-                <a href="{{ route('users.index') }}"
-                    class="inline-flex items-center px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Active Users
-                </a>
-            @else
-                <!-- Archived -->
-                <a href="{{ route('users.index', ['archived' => 'true']) }}"
-                    class="inline-flex items-center px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Archived Users
-                </a>
-            @endif
-        </div>
+            <!-- Toolbar: Tabs & Search & Actions -->
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-gray-100 gap-4">
+                
+                <!-- Tabs: Active vs Archived -->
+                <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+                    <a href="{{ route('users.index') }}" 
+                       class="px-4 py-2 rounded-md text-sm font-medium transition-all {{ !request('archived') ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+                        Active Users
+                    </a>
+                    <a href="{{ route('users.index', ['archived' => 'true']) }}" 
+                       class="px-4 py-2 rounded-md text-sm font-medium transition-all {{ request('archived') == 'true' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+                        Archived Users
+                    </a>
+                </div>
 
+                <!-- Search & Add -->
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <form method="GET" action="{{ route('users.index') }}" class="relative w-full sm:w-64">
+                        @if(request('archived'))
+                            <input type="hidden" name="archived" value="true">
+                        @endif
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </span>
+                        <input type="text" name="search" value="{{ request('search') }}" 
+                               class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" 
+                               placeholder="Search users...">
+                    </form>
+                    
+                    @if(auth()->user()->role == 'admin')
+                    <a href="{{ route('users.create') }}" 
+                       class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Add User
+                    </a>
+                    @endif
+                </div>
+            </div>
 
-        <!-- Job Vacancy Table -->
-        <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow mt-4 bg-white">
-            <thead>
-                <tr>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Name</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Email</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Role</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($users as $user)
-                    <tr @if(request()->input('archived') != 'true' && $user->role != 'admin') data-href="{{ route('users.edit', $user->id) }}" tabindex="0" role="link" aria-label="Edit user {{ $user->name }}" @endif class="border-b hover:bg-gray-50">
-                        <td class="px-6 py-4 text-gray-800 truncate max-w-lg">
-                            <span class="text-gray-700">{{ $user->name }}</span>
-                        </td>
-                        <td class="px-6 py-4 text-gray-800 truncate">{{ $user->email }}</td>
-                        <td class="px-6 py-4 text-gray-800">{{ $user->role }}</td>
-                        <td>
-                            <div class="flex items-center space-x-4">
-                                @if(request()->input('archived') == 'true')
-                                    <!-- Restore Button -->
-                                    <form action="{{ route('users.restore', $user->id) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="text-green-600 hover:text-green-800 text-sm">🔄 Restore</button>
-                                    </form>
-                                @else
-                                    <!-- If Admin don't allow edit or delete -->
-                                    @if($user->role != 'admin')
-                                        <!-- Edit Button -->
-                                        <a href="{{ route('users.edit', $user->id) }}" class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">✍️ Edit</a>
-
-                                        <!-- Archive Button -->
-                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm">🗃️ Archive</button>
-                                        </form>
-                                    @endif
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="px-6 py-4 text-gray-800">No users found</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-
-        <div class="mt-4">
-            {{ $users->links() }}
+            <!-- Users Table -->
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-100">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User Details</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse ($users as $user)
+                                <tr class="hover:bg-gray-50 transition-colors {{ $user->role == 'admin' ? 'bg-gray-50/50' : '' }}">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold uppercase">
+                                                    {{ substr($user->name, 0, 1) }}
+                                                </div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
+                                                <div class="text-sm text-gray-500">{{ $user->email }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @php
+                                            $roleColors = [
+                                                'admin' => 'bg-purple-100 text-purple-800',
+                                                'company_owner' => 'bg-blue-100 text-blue-800',
+                                                'job_seeker' => 'bg-green-100 text-green-800',
+                                            ];
+                                            $roleLabel = ucwords(str_replace('_', ' ', $user->role));
+                                            $badgeColor = $roleColors[$user->role] ?? 'bg-gray-100 text-gray-800';
+                                        @endphp
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $badgeColor }}">
+                                            {{ $roleLabel }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if(request('archived'))
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Archived</span>
+                                        @else
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex justify-end items-center space-x-3">
+                                            @if(request('archived') == 'true')
+                                                <form action="{{ route('users.restore', $user->id) }}" method="POST">
+                                                    @csrf @method('PUT')
+                                                    <button type="submit" class="text-green-600 hover:text-green-900 flex items-center" title="Restore User">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                                        Restore
+                                                    </button>
+                                                </form>
+                                            @else
+                                                @if($user->role != 'admin' || auth()->user()->id == $user->id)
+                                                    <a href="{{ route('users.edit', $user->id) }}" class="text-indigo-600 hover:text-indigo-900 flex items-center">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                        Edit
+                                                    </a>
+                                                    @if(auth()->user()->id != $user->id)
+                                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to archive this user?');">
+                                                            @csrf @method('DELETE')
+                                                            <button type="submit" class="text-red-600 hover:text-red-900 flex items-center ml-2">
+                                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                                                                Archive
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-6 py-10 text-center text-gray-500">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <svg class="h-10 w-10 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                            <p>No users found matching your criteria.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                
+                @if($users->hasPages())
+                    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+                        {{ $users->links() }}
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </x-app-layout>

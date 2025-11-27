@@ -18,6 +18,7 @@ class JobVacancyController extends Controller
         // Active
         $query = JobVacancy::latest();
 
+        // Scope the query for company_owner role
         if (auth()->user()->role == 'company_owner') {
             $company = auth()->user()->company;
             if (! $company) {
@@ -28,8 +29,28 @@ class JobVacancyController extends Controller
             }
         }
 
-        // Eager-load company (include soft-deleted companies) to avoid null relation errors
-        $query->with(['company' => function($q) { $q->withTrashed(); }]);
+        // Eager-load company (include soft-deleted companies) and category
+        $query->with([
+            'company' => function($q) { $q->withTrashed(); },
+            'jobCategory'
+        ]);
+
+        // Handle Search query: Search by title, company name, or category name
+        $search = $request->input('search');
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                // 1. Search by job title
+                $q->where('title', 'like', '%' . $search . '%')
+                  // 2. Search by company name (relationship)
+                  ->orWhereHas('company', function ($q) use ($search) {
+                      $q->where('name', 'like', '%' . $search . '%');
+                  })
+                  // 3. Search by category name (relationship)
+                  ->orWhereHas('jobCategory', function ($q) use ($search) {
+                      $q->where('name', 'like', '%' . $search . '%');
+                  });
+            });
+        }
 
         // Archived
         if ($request->input('archived') == 'true') {
@@ -37,7 +58,9 @@ class JobVacancyController extends Controller
         }
 
         $jobVacancies = $query->paginate(10)->onEachSide(1);
-        return view('job-vacancy.index', compact('jobVacancies'));
+        
+        // Pass the search term back to the view
+        return view('job-vacancy.index', compact('jobVacancies', 'search'));
     }
 
     /**

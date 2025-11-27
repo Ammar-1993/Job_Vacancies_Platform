@@ -17,13 +17,24 @@ class UserController extends Controller
         // Active
         $query = User::latest();
 
+        // Handle Search query: Search by name or email
+        $search = $request->input('search');
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        }
+
         // Archived
         if ($request->input('archived') == 'true') {
             $query->onlyTrashed();
         }
 
         $users = $query->paginate(10)->onEachSide(1);
-        return view('user.index', compact('users'));
+        
+        // Pass the search term back to the view
+        return view('user.index', compact('users', 'search'));
     }
 
     /**

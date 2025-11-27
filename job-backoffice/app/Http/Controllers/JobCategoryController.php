@@ -21,8 +21,16 @@ class JobCategoryController extends Controller
             $query->onlyTrashed();
         }
 
+        // Handle Search query: Search by category name
+        $search = $request->input('search');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
         $categories = $query->paginate(10)->onEachSide(1);
-        return view('job-category.index', compact('categories'));
+        
+        // Pass the search term back to the view
+        return view('job-category.index', compact('categories', 'search'));
     }
 
     /**

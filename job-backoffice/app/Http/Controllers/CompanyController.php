@@ -15,16 +15,29 @@ class CompanyController extends Controller
 
     public function index(Request $request)
     {
-        // Active
+        // 1. Initialize the query for active companies
         $query = Company::latest();
 
-        // Archived
+        // 2. Handle Archived status
         if ($request->input('archived') == 'true') {
             $query->onlyTrashed();
         }
 
+        // 3. Handle Search query
+        $search = $request->input('search');
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('address', 'like', '%' . $search . '%')
+                  ->orWhere('industry', 'like', '%' . $search . '%');
+            });
+        }
+
+        // 4. Paginate the results
         $companies = $query->paginate(10)->onEachSide(1);
-        return view('company.index', compact('companies'));
+        
+        // Pass the search term back to the view to maintain the input value
+        return view('company.index', compact('companies', 'search'));
     }
 
     /**

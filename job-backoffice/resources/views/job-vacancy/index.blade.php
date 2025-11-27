@@ -1,108 +1,128 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Job Vacancies') }} {{ request()->input('archived') == 'true' ? '(Archived)' : '' }}
+            {{ __('Job Vacancies') }}
         </h2>
     </x-slot>
 
-    <div class="overflow-x-auto p-6">
-        <x-toast-notification />
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <x-toast-notification />
 
-        <div class="flex justify-end items-center space-x-4">
-            @if(request()->input('archived') == 'true')
-                <!-- Active -->
-                <a href="{{ route('job-vacancies.index') }}"
-                    class="inline-flex items-center px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Active Job Vacancies
-                </a>
-            @else
-                <!-- Archived -->
-                <a href="{{ route('job-vacancies.index', ['archived' => 'true']) }}"
-                    class="inline-flex items-center px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Archived Job Vacancies
-                </a>
-            @endif
+            <!-- Toolbar -->
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-gray-100 gap-4">
+                
+                <!-- Tabs -->
+                <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+                    <a href="{{ route('job-vacancies.index') }}" 
+                       class="px-4 py-2 rounded-md text-sm font-medium transition-all {{ !request('archived') ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+                        Active Jobs
+                    </a>
+                    <a href="{{ route('job-vacancies.index', ['archived' => 'true']) }}" 
+                       class="px-4 py-2 rounded-md text-sm font-medium transition-all {{ request('archived') == 'true' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+                        Archived Jobs
+                    </a>
+                </div>
 
-            <!-- Add Company Button -->
-            <a href="{{ route('job-vacancies.create') }}"
-                class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Add Job Vacancy
-            </a>
-        </div>
-
-
-        <!-- Job Vacancy Table -->
-        <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow mt-4 bg-white">
-            <thead>
-                <tr>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Title</th>
-                    @if(auth()->user()->role == 'admin')
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Company</th>
-                    @endif
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Location</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Type</th>
-                    <th class="px-6 py-3 text-right text-sm font-semibold text-gray-600">Salary</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($jobVacancies as $jobVacancy)
-                    <tr @if(request()->input('archived') != 'true') data-href="{{ route('job-vacancies.show', $jobVacancy->id) }}" tabindex="0" role="link" aria-label="Open {{ $jobVacancy->title }}" @endif class="border-b hover:bg-gray-50">
-                        <td class="px-6 py-4 text-gray-800 truncate max-w-xl">
-                            @if(request()->input('archived') == 'true')
-                                <span class="text-gray-500">{{ $jobVacancy->title }}</span>
-                            @else
-                                <a class="text-blue-500 hover:text-blue-700 underline" href="{{ route('job-vacancies.show', $jobVacancy->id) }}">{{ $jobVacancy->title }}</a>
-                            @endif
-                        </td>
-                        @if(auth()->user()->role == 'admin')
-                            <td class="px-6 py-4 text-gray-800">
-                                @if($jobVacancy->company)
-                                    {{ $jobVacancy->company->name }}
-                                @else
-                                    <span class="text-sm text-gray-500">Company deleted</span>
-                                @endif
-                            </td>
+                <!-- Search & Add -->
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <form method="GET" action="{{ route('job-vacancies.index') }}" class="relative w-full sm:w-64">
+                        @if(request('archived'))
+                            <input type="hidden" name="archived" value="true">
                         @endif
-                        <td class="px-6 py-4 text-gray-800">{{ $jobVacancy->location }}</td>
-                        <td class="px-6 py-4 text-gray-800">{{ $jobVacancy->type }}</td>
-                        <td class="px-6 py-4 text-right text-gray-800">${{ number_format($jobVacancy->salary, 2) }}</td>
-                        <td>
-                            <div class="flex items-center space-x-4">
-                                @if(request()->input('archived') == 'true')
-                                    <!-- Restore Button -->
-                                    <form action="{{ route('job-vacancies.restore', $jobVacancy->id) }}" method="POST"
-                                        class="inline-block">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="text-green-600 hover:text-green-800 text-sm">🔄 Restore</button>
-                                    </form>
-                                @else
-                                    <!-- Edit Button -->
-                                    <a href="{{ route('job-vacancies.edit', $jobVacancy->id) }}"
-                                        class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">✍️ Edit</a>
+                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        </span>
+                        <input type="text" name="search" value="{{ request('search') }}" 
+                               class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" 
+                               placeholder="Search job title...">
+                    </form>
 
-                                    <!-- Archive Button -->
-                                    <form action="{{ route('job-vacancies.destroy', $jobVacancy->id) }}" method="POST"
-                                        class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800 text-sm">🗃️ Archive</button>
-                                    </form>
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="px-6 py-4 text-gray-800">No job vacancies found</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                    <a href="{{ route('job-vacancies.create') }}" 
+                       class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Add Job
+                    </a>
+                </div>
+            </div>
 
-        <div class="mt-4">
-            {{ $jobVacancies->links() }}
+            <!-- Job Vacancy Table -->
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-100">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job Details</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location & Type</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Salary</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse ($jobVacancies as $jobVacancy)
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-medium text-indigo-600">
+                                            @if(request('archived') != 'true')
+                                                <a href="{{ route('job-vacancies.show', $jobVacancy->id) }}" class="hover:underline">{{ $jobVacancy->title }}</a>
+                                            @else
+                                                <span class="text-gray-900">{{ $jobVacancy->title }}</span>
+                                            @endif
+                                        </div>
+                                        @if(auth()->user()->role == 'admin')
+                                            <div class="text-xs text-gray-500">{{ $jobVacancy->company?->name ?? 'Company Deleted' }}</div>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">{{ $jobVacancy->location }}</div>
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                            {{ $jobVacancy->type }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-600 font-mono">
+                                        ${{ number_format($jobVacancy->salary, 0) }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex justify-end items-center space-x-3">
+                                            @if(request('archived') == 'true')
+                                                <form action="{{ route('job-vacancies.restore', $jobVacancy->id) }}" method="POST">
+                                                    @csrf @method('PUT')
+                                                    <button type="submit" class="text-green-600 hover:text-green-900 flex items-center">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                                        Restore
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <a href="{{ route('job-vacancies.edit', $jobVacancy->id) }}" class="text-indigo-600 hover:text-indigo-900 flex items-center">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                    Edit
+                                                </a>
+                                                <form action="{{ route('job-vacancies.destroy', $jobVacancy->id) }}" method="POST" onsubmit="return confirm('Archive this vacancy?');">
+                                                    @csrf @method('DELETE')
+                                                    <button type="submit" class="text-red-600 hover:text-red-900 flex items-center ml-2">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                                                        Archive
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-6 py-10 text-center text-gray-500">No job vacancies found.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                @if($jobVacancies->hasPages())
+                    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+                        {{ $jobVacancies->links() }}
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </x-app-layout>
