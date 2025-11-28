@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobVacancy;
+use App\Models\JobApplication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class DashboardController extends Controller
 {
@@ -34,8 +36,14 @@ class DashboardController extends Controller
             $query->where('type', $request->filter);
         }
 
-        $jobs = $query->latest()->paginate(10)->withQueryString();
+        // Fix N+1 by eager loading 'company'
+        $jobs = $query->with('company')->latest()->paginate(10)->withQueryString();
 
-        return view('dashboard', compact('jobs'));
+        // Statistics
+        $applicationsSentCount = JobApplication::where('userId', auth()->id())->count();
+        $newJobsTodayCount = JobVacancy::whereDate('created_at', Carbon::today())->count();
+        $savedJobsCount = auth()->user()->savedJobs()->count();
+
+        return view('dashboard', compact('jobs', 'applicationsSentCount', 'newJobsTodayCount', 'savedJobsCount'));
     }
 }

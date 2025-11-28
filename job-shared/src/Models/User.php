@@ -69,4 +69,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class, 'ownerId', 'id');
     }
+
+    public function savedJobs()
+    {
+        return $this->belongsToMany(JobVacancy::class, 'saved_jobs', 'userId', 'jobVacancyId')->withTimestamps();
+    }
 }

@@ -42,7 +42,7 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-300">Saved Jobs</p>
-                                <p class="text-2xl font-bold text-white">42</p>
+                                <p class="text-2xl font-bold text-white">{{ number_format($savedJobsCount) }}</p>
                             </div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-300">Applications Sent</p>
-                                <p class="text-2xl font-bold text-white">18</p>
+                                <p class="text-2xl font-bold text-white">{{ number_format($applicationsSentCount) }}</p>
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-300">New Today</p>
-                                <p class="text-2xl font-bold text-white">5</p>
+                                <p class="text-2xl font-bold text-white">{{ number_format($newJobsTodayCount) }}</p>
                             </div>
                         </div>
                     </div>
