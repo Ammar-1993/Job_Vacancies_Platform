@@ -73,7 +73,7 @@
 
                     <!-- Resume Selection Section -->
                     <div class="space-y-6">
-                        <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">1. Select or Upload Your Resume</h3>
+                        <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">Select or Upload Your Resume</h3>
 
                         <!-- Existing Resumes -->
                         <fieldset class="space-y-4">
