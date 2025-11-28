@@ -1,3 +1,169 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+   /* Custom CSS for the attractive spinner animation  */
+   
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.3);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .ai-pulse-ring:before {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid;
+            border-color: #6366f1; /* Indigo-500 */
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.7);
+            animation: pulse-ring 2s cubic-bezier(0.66, 0, 0, 1) infinite;
+        }
+
+        @keyframes spin-gradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ai-spinner {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            padding: 4px; /* Padding for the gradient border effect */
+            background: linear-gradient(135deg, #1f2937 0%, #1f2937 100%); /* Dark background inside */
+            position: relative;
+        }
+
+        .ai-spinner:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            /* Creative gradient for the spinner border */
+            background: conic-gradient(
+                from 0deg,
+                #db2777 0%, /* Pink-600 */
+                #4f46e5 50%, /* Indigo-600 */
+                #db2777 100% /* Pink-600 */
+            );
+            mask: radial-gradient(transparent 70%, #000 70%);
+            -webkit-mask: radial-gradient(transparent 70%, #000 70%);
+            animation: spin-gradient 1.5s linear infinite;
+        }
+
+        .ai-spinner-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #a5b4fc; /* Indigo-300 */
+        }
+   
+
+
+
+
+
+        /* --- Modern Loader Styles --- */
+        .ai-loader-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .ai-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top-color: #6366f1; /* Indigo */
+            animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        .ai-ring:nth-child(2) {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            border-top-color: #ec4899; /* Pink */
+            animation: spin 2s linear infinite reverse;
+        }
+
+        .ai-ring:nth-child(3) {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            border-top-color: #8b5cf6; /* Violet */
+            animation: spin-slow 3s linear infinite;
+        }
+
+        .ai-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 5px rgba(99, 102, 241, 0.8);
+            animation: pulse-core 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes spin-slow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-core {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; box-shadow: 0 0 10px 2px rgba(99, 102, 241, 0.5); }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; box-shadow: 0 0 30px 10px rgba(236, 72, 153, 0.8); }
+        }
+
+        /* --- Glassmorphism Utilities --- */
+        .glass-panel {
+            background: rgba(31, 41, 55, 0.7); /* Dark semi-transparent */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .glass-input {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-input:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            background: rgba(17, 24, 39, 0.8);
+        }
+
+         @keyframes progress {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(200%); }
+                }
+                @keyframes shine {
+                    100% { left: 125%; }
+                }
+   
