@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\JobVacancy;
 use App\Models\JobApplication;
+use Illuminate\Support\Facades\Cache;
+
 class DashboardController extends Controller
 {
     public function index()
@@ -22,39 +24,49 @@ class DashboardController extends Controller
     private function adminDashboard()
     {
         // Last 30 days active users (job_seeker role)
-        $activeUsers = User::where('last_login_at', '>=', now()->subDays(30))
-            ->where('role', 'job_seeker')->count();
+        $activeUsers = Cache::remember('admin_active_users', 600, function () {
+            return User::where('last_login_at', '>=', now()->subDays(30))
+                ->where('role', 'job_seeker')->count();
+        });
 
         // Total jobs (not deleted)
-        $totalJobs = JobVacancy::whereNull('deleted_at')->count();
+        $totalJobs = Cache::remember('admin_total_jobs', 600, function () {
+            return JobVacancy::whereNull('deleted_at')->count();
+        });
 
         // Total applications (not deleted)
-        $totalApplications = JobApplication::whereNull('deleted_at')->count();
+        $totalApplications = Cache::remember('admin_total_applications', 600, function () {
+            return JobApplication::whereNull('deleted_at')->count();
+        });
 
         // Most applied jobs
-        $mostAppliedJobs = JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
-            ->whereNull('deleted_at')
-            ->limit(5)
-            ->orderByDesc('totalCount')
-            ->get();
+        $mostAppliedJobs = Cache::remember('admin_most_applied_jobs', 600, function () {
+            return JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
+                ->whereNull('deleted_at')
+                ->limit(5)
+                ->orderByDesc('totalCount')
+                ->get();
+        });
 
 
         // Conversion rates
-        $conversionRates = JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
-            ->having('totalCount', '>', 0)
-            ->limit(5)
-            ->orderByDesc('totalCount')
-            ->get()
-            ->map(function ($job) {
-                if($job->viewCount > 0) {
-                    $job->conversionRate = round( $job->totalCount / $job->viewCount * 100, 2);
-                } else {
-                    $job->conversionRate = 0;
-                }
-                
-                
-                return $job;
-            });
+        $conversionRates = Cache::remember('admin_conversion_rates', 600, function () {
+            return JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
+                ->having('totalCount', '>', 0)
+                ->limit(5)
+                ->orderByDesc('totalCount')
+                ->get()
+                ->map(function ($job) {
+                    if($job->viewCount > 0) {
+                        $job->conversionRate = round( $job->totalCount / $job->viewCount * 100, 2);
+                    } else {
+                        $job->conversionRate = 0;
+                    }
+                    
+                    
+                    return $job;
+                });
+        });
 
             $analytics = [
                 'activeUsers' => $activeUsers,
@@ -86,41 +98,51 @@ class DashboardController extends Controller
         }
 
         // filter active users by applying to jobs of the company
-        $activeUsers = User::where('last_login_at', '>=', now()->subDays(30))
-            ->where('role', 'job_seeker')
-            ->whereHas('jobApplications', function($query) use ($company) {
-                $query->whereIn('jobVacancyId', $company->jobVacancies->pluck('id'));
-            })
-            ->count();
+        $activeUsers = Cache::remember('company_' . $company->id . '_active_users', 600, function () use ($company) {
+            return User::where('last_login_at', '>=', now()->subDays(30))
+                ->where('role', 'job_seeker')
+                ->whereHas('jobApplications', function($query) use ($company) {
+                    $query->whereIn('jobVacancyId', $company->jobVacancies->pluck('id'));
+                })
+                ->count();
+        });
 
         // total jobs of the company
-        $totalJobs = $company->jobVacancies->count();
+        $totalJobs = Cache::remember('company_' . $company->id . '_total_jobs', 600, function () use ($company) {
+            return $company->jobVacancies->count();
+        });
 
         // total applications of the company
-        $totalApplications = JobApplication::whereIn('jobVacancyId', $company->jobVacancies->pluck('id'))->count();
+        $totalApplications = Cache::remember('company_' . $company->id . '_total_applications', 600, function () use ($company) {
+            return JobApplication::whereIn('jobVacancyId', $company->jobVacancies->pluck('id'))->count();
+        });
         
         // most applied jobs of the company
-        $mostAppliedJobs = JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
-            ->whereIn('id', $company->jobVacancies->pluck('id'))
-            ->limit(5)
-            ->orderByDesc('totalCount')
-            ->get();
+        $mostAppliedJobs = Cache::remember('company_' . $company->id . '_most_applied_jobs', 600, function () use ($company) {
+            return JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
+                ->whereIn('id', $company->jobVacancies->pluck('id'))
+                ->limit(5)
+                ->orderByDesc('totalCount')
+                ->get();
+        });
 
         // conversion rates of the company
-        $conversionRates = JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
-            ->whereIn('id', $company->jobVacancies->pluck('id'))
-            ->having('totalCount', '>', 0)
-            ->limit(5)
-            ->orderByDesc('totalCount')
-            ->get()
-            ->map(function ($job) {
-                if($job->viewCount > 0) {
-                    $job->conversionRate = round( $job->totalCount / $job->viewCount * 100, 2);
-                } else {
-                    $job->conversionRate = 0;
-                }
-                return $job;
-            });
+        $conversionRates = Cache::remember('company_' . $company->id . '_conversion_rates', 600, function () use ($company) {
+            return JobVacancy::with(['company' => function($q) { $q->withTrashed(); }])->withCount('jobApplications as totalCount')
+                ->whereIn('id', $company->jobVacancies->pluck('id'))
+                ->having('totalCount', '>', 0)
+                ->limit(5)
+                ->orderByDesc('totalCount')
+                ->get()
+                ->map(function ($job) {
+                    if($job->viewCount > 0) {
+                        $job->conversionRate = round( $job->totalCount / $job->viewCount * 100, 2);
+                    } else {
+                        $job->conversionRate = 0;
+                    }
+                    return $job;
+                });
+        });
     
 
         $analytics = [
