@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Add Company') }}
+            {{ __('app.companies.create_title') }}
         </h2>
     </x-slot>
 
@@ -12,11 +12,11 @@
 
                 <!-- Company Details -->
                 <div class="mb-4 p-6 bg-gray-50 border border-gray-100 rounded-lg shadow-sm">
-                    <h3 class="text-lg font-bold">Company Details</h3>
-                    <p class="text-sm mb-2">Enter the company details</p>
+                    <h3 class="text-lg font-bold">{{ __('app.companies.details') }}</h3>
+                    <p class="text-sm mb-2">{{ __('app.companies.enter_details') }}</p>
 
                     <div class="mb-4">
-                        <label for="name" class="block text-sm font-medium text-gray-700">Company Name</label>
+                        <label for="name" class="block text-sm font-medium text-gray-700">{{ __('app.companies.form_name') }}</label>
                         <input type="text" name="name" id="name" value="{{ old('name') }}"
                             class="{{ $errors->has('name') ? 'outline-red-500 outline outline-1' : '' }} mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         @error('name')
@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                        <label for="address" class="block text-sm font-medium text-gray-700">{{ __('app.companies.form_address') }}</label>
                         <input type="text" name="address" id="address" value="{{ old('address') }}"
                             class="{{ $errors->has('address') ? 'outline-red-500 outline outline-1' : '' }} mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         @error('address')
@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="industry" class="block text-sm font-medium text-gray-700">Industry</label>
+                        <label for="industry" class="block text-sm font-medium text-gray-700">{{ __('app.companies.form_industry') }}</label>
                         <select name="industry" id="industry"
                             class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                             @foreach ($industries as $industry)
@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="website" class="block text-sm font-medium text-gray-700">Website (optional)</label>
+                        <label for="website" class="block text-sm font-medium text-gray-700">{{ __('app.companies.form_website') }}</label>
                         <input type="text" name="website" id="website" value="{{ old('website') }}"
                             class="{{ $errors->has('website') ? 'outline-red-500 outline outline-1' : '' }} mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         @error('website')
@@ -59,11 +59,11 @@
                 <!-- Company Owner -->
 
                 <div class="mb-4 p-6 bg-gray-50 border border-gray-100 rounded-lg shadow-sm">
-                    <h3 class="text-lg font-bold">Company Owner</h3>
-                    <p class="text-sm mb-4">Enter the company owner details</p>
+                    <h3 class="text-lg font-bold">{{ __('app.companies.owner_section') }}</h3>
+                    <p class="text-sm mb-4">{{ __('app.companies.enter_owner_details') }}</p>
 
                     <div class="mb-4">
-                        <label for="owner_name" class="block text-sm font-medium text-gray-700">Owner Name</label>
+                        <label for="owner_name" class="block text-sm font-medium text-gray-700">{{ __('app.companies.owner_name') }}</label>
                         <input type="text" name="owner_name" id="owner_name" value="{{ old('owner_name') }}"
                             class="{{ $errors->has('owner_name') ? 'outline-red-500 outline outline-1' : '' }} mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         @error('owner_name')
@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="owner_email" class="block text-sm font-medium text-gray-700">Owner Email</label>
+                        <label for="owner_email" class="block text-sm font-medium text-gray-700">{{ __('app.companies.owner_email') }}</label>
                         <input type="email" name="owner_email" id="owner_email" value="{{ old('owner_email') }}"
                             class="{{ $errors->has('owner_email') ? 'outline-red-500 outline outline-1' : '' }} mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         @error('owner_email')
@@ -83,8 +83,7 @@
                     <!-- Owner Password -->
 
                     <div class="mb-4">
-                        <label for="owner_password" class="block text-sm font-medium text-gray-700">Owner
-                            Password</label>
+                        <label for="owner_password" class="block text-sm font-medium text-gray-700">{{ __('app.companies.owner_password') }}</label>
                         <div class="relative" x-data="{ showPassword: false }">
                             <x-text-input id="owner_password" class="block mt-1 w-full"
                                 x-bind:type="showPassword ? 'text' : 'password'" name="owner_password" required
@@ -124,11 +123,11 @@
                 <div class="flex justify-end space-x-4">
                     <a href="{{ route('companies.index') }}"
                         class="px-4 py-2 rounded-md text-gray-500 hover:text-gray-700">
-                        Cancel
+                        {{ __('app.common.cancel') }}
                     </a>
                     <button type="submit"
                         class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Add Company
+                        {{ __('app.companies.add_btn') }}
                     </button>
                 </div>
             </form>

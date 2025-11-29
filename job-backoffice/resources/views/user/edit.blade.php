@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit User Password') }}
+            {{ __('app.users.edit_password_title') }}
         </h2>
     </x-slot>
 
@@ -13,25 +13,25 @@
 
                 <!-- User Details -->
                 <div class="mb-4 p-6 bg-gray-50 border border-gray-100 rounded-lg shadow-sm">
-                    <h3 class="text-lg font-bold">User Details</h3>
+                    <h3 class="text-lg font-bold">{{ __('app.users.user_details') }}</h3>
                     <div class="mb-4">
-                        <label for="title" class="block text-sm font-medium text-gray-700">User Name</label>
+                        <label for="title" class="block text-sm font-medium text-gray-700">{{ __('app.users.user_name') }}</label>
                         <span>{{ $user->name }}</span>
                     </div>
 
                     <div class="mb-4">
-                        <label for="title" class="block text-sm font-medium text-gray-700">User Email</label>
+                        <label for="title" class="block text-sm font-medium text-gray-700">{{ __('app.users.user_email') }}</label>
                         <span>{{ $user->email }}</span>
                     </div>
 
                     <div class="mb-4">
-                        <label for="title" class="block text-sm font-medium text-gray-700">User Role</label>
+                        <label for="title" class="block text-sm font-medium text-gray-700">{{ __('app.users.user_role') }}</label>
                         <span>{{ $user->role }}</span>
                     </div>
 
                     <div class="mb-4">
                         <label for="password" class="block text-sm font-medium text-gray-700">
-                            Change User Password</label>
+                            {{ __('app.users.change_password') }}</label>
                         <div class="relative" x-data="{ showPassword: false }">
                             <x-text-input id="password" class="block mt-1 w-full"
                                 x-bind:type="showPassword ? 'text' : 'password'" name="password"
@@ -71,11 +71,11 @@
                 <div class="flex justify-end space-x-4">
                     <a href="{{ route('users.index') }}"
                         class="px-4 py-2 rounded-md text-gray-500 hover:text-gray-700">
-                        Cancel
+                        {{ __('app.common.cancel') }}
                     </a>
                     <button type="submit"
                         class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Update User Password
+                        {{ __('app.users.update_password_btn') }}
                     </button>
                 </div>
             </form>

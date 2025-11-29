@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Companies Directory') }}
+            {{ __('app.companies.directory_title') }}
         </h2>
     </x-slot>
 
@@ -16,11 +16,11 @@
                 <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg">
                     <a href="{{ route('companies.index') }}" 
                        class="px-4 py-2 rounded-md text-sm font-medium transition-all {{ !request('archived') ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
-                        Active Companies
+                        {{ __('app.companies.active_companies') }}
                     </a>
                     <a href="{{ route('companies.index', ['archived' => 'true']) }}" 
                        class="px-4 py-2 rounded-md text-sm font-medium transition-all {{ request('archived') == 'true' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
-                        Archived Companies
+                        {{ __('app.companies.archived_companies') }}
                     </a>
                 </div>
 
@@ -37,13 +37,13 @@
                         </span>
                         <input type="text" name="search" value="{{ request('search') }}" 
                                class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" 
-                               placeholder="Search companies...">
+                               placeholder="{{ __('app.companies.search_placeholder') }}">
                     </form>
 
                     <a href="{{ route('companies.create') }}" 
                        class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        Add Company
+                        {{ __('app.companies.add_company') }}
                     </a>
                 </div>
             </div>
@@ -54,10 +54,10 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Name</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Website</th>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('app.companies.name') }}</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('app.companies.details') }}</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('app.companies.website') }}</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('app.common.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -88,7 +88,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if($company->website)
                                             <a href="{{ $company->website }}" target="_blank" class="text-sm text-indigo-500 hover:text-indigo-700 flex items-center">
-                                                Visit Site <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                                {{ __('app.companies.visit_site') }} <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                                             </a>
                                         @else
                                             <span class="text-sm text-gray-400">-</span>
@@ -101,19 +101,19 @@
                                                     @csrf @method('PUT')
                                                     <button type="submit" class="text-green-600 hover:text-green-900 flex items-center">
                                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                                        Restore
+                                                        {{ __('app.common.restore') }}
                                                     </button>
                                                 </form>
                                             @else
                                                 <a href="{{ route('companies.edit', $company->id) }}" class="text-indigo-600 hover:text-indigo-900 flex items-center">
                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                                    Edit
+                                                    {{ __('app.common.edit') }}
                                                 </a>
-                                                <form action="{{ route('companies.destroy', $company->id) }}" method="POST" onsubmit="return confirm('Archive this company?');">
+                                                <form action="{{ route('companies.destroy', $company->id) }}" method="POST" onsubmit="return confirm('{{ __('app.companies.confirm_archive') }}');">
                                                     @csrf @method('DELETE')
                                                     <button type="submit" class="text-red-600 hover:text-red-900 flex items-center ml-2">
                                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
-                                                        Archive
+                                                        {{ __('app.common.archive') }}
                                                     </button>
                                                 </form>
                                             @endif
@@ -125,7 +125,7 @@
                                     <td colspan="4" class="px-6 py-10 text-center text-gray-500">
                                         <div class="flex flex-col items-center justify-center">
                                             <svg class="h-10 w-10 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                                            <p>No companies found.</p>
+                                            <p>{{ __('app.companies.no_companies') }}</p>
                                         </div>
                                     </td>
                                 </tr>

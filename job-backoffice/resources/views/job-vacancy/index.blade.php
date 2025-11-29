@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Job Vacancies') }}
+            {{ __('app.jobs.title') }}
         </h2>
     </x-slot>
 
@@ -16,11 +16,11 @@
                 <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg">
                     <a href="{{ route('job-vacancies.index') }}" 
                        class="px-4 py-2 rounded-md text-sm font-medium transition-all {{ !request('archived') ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
-                        Active Jobs
+                        {{ __('app.jobs.active_jobs') }}
                     </a>
                     <a href="{{ route('job-vacancies.index', ['archived' => 'true']) }}" 
                        class="px-4 py-2 rounded-md text-sm font-medium transition-all {{ request('archived') == 'true' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
-                        Archived Jobs
+                        {{ __('app.jobs.archived_jobs') }}
                     </a>
                 </div>
 
@@ -35,13 +35,13 @@
                         </span>
                         <input type="text" name="search" value="{{ request('search') }}" 
                                class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" 
-                               placeholder="Search job title...">
+                               placeholder="{{ __('app.jobs.search_placeholder') }}">
                     </form>
 
                     <a href="{{ route('job-vacancies.create') }}" 
                        class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        Add Job
+                        {{ __('app.jobs.add_job') }}
                     </a>
                 </div>
             </div>
@@ -52,10 +52,10 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job Details</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location & Type</th>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Salary</th>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('app.jobs.details') }}</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('app.jobs.location_type') }}</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('app.jobs.salary') }}</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('app.common.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -70,7 +70,7 @@
                                             @endif
                                         </div>
                                         @if(auth()->user()->role == 'admin')
-                                            <div class="text-xs text-gray-500">{{ $jobVacancy->company?->name ?? 'Company Deleted' }}</div>
+                                            <div class="text-xs text-gray-500">{{ $jobVacancy->company?->name ?? __('app.dashboard.company_deleted') }}</div>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -89,19 +89,19 @@
                                                     @csrf @method('PUT')
                                                     <button type="submit" class="text-green-600 hover:text-green-900 flex items-center">
                                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                                        Restore
+                                                        {{ __('app.common.restore') }}
                                                     </button>
                                                 </form>
                                             @else
                                                 <a href="{{ route('job-vacancies.edit', $jobVacancy->id) }}" class="text-indigo-600 hover:text-indigo-900 flex items-center">
                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                                    Edit
+                                                    {{ __('app.common.edit') }}
                                                 </a>
-                                                <form action="{{ route('job-vacancies.destroy', $jobVacancy->id) }}" method="POST" onsubmit="return confirm('Archive this vacancy?');">
+                                                <form action="{{ route('job-vacancies.destroy', $jobVacancy->id) }}" method="POST" onsubmit="return confirm('{{ __('app.jobs.confirm_archive') }}');">
                                                     @csrf @method('DELETE')
                                                     <button type="submit" class="text-red-600 hover:text-red-900 flex items-center ml-2">
                                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
-                                                        Archive
+                                                        {{ __('app.common.archive') }}
                                                     </button>
                                                 </form>
                                             @endif
@@ -110,7 +110,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-6 py-10 text-center text-gray-500">No job vacancies found.</td>
+                                    <td colspan="4" class="px-6 py-10 text-center text-gray-500">{{ __('app.jobs.no_jobs') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>

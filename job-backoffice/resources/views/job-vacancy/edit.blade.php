@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Job Vacancy') }}
+            {{ __('app.jobs.edit_title') }}
         </h2>
     </x-slot>
 
@@ -13,11 +13,11 @@
 
                 <!-- Job Vacancy Details -->
                 <div class="mb-4 p-6 bg-gray-50 border border-gray-100 rounded-lg shadow-sm">
-                    <h3 class="text-lg font-bold">Job Vacancy Details</h3>
-                    <p class="text-sm mb-2">Enter the job vacancy details</p>
+                    <h3 class="text-lg font-bold">{{ __('app.jobs.details') }}</h3>
+                    <p class="text-sm mb-2">{{ __('app.jobs.enter_details') }}</p>
 
                     <div class="mb-4">
-                        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                        <label for="title" class="block text-sm font-medium text-gray-700">{{ __('app.jobs.form_title') }}</label>
                         <input type="text" name="title" id="title" value="{{ old('title', $jobVacancy->title) }}"
                             class="{{ $errors->has('title') ? 'outline-red-500 outline outline-1' : '' }} mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         @error('title')
@@ -26,7 +26,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                        <label for="location" class="block text-sm font-medium text-gray-700">{{ __('app.jobs.form_location') }}</label>
                         <input type="text" name="location" id="location" value="{{ old('location', $jobVacancy->location) }}"
                             class="{{ $errors->has('location') ? 'outline-red-500 outline outline-1' : '' }} mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         @error('location')
@@ -35,8 +35,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="salary" class="block text-sm font-medium text-gray-700">Expected Salary
-                            (USD)</label>
+                        <label for="salary" class="block text-sm font-medium text-gray-700">{{ __('app.jobs.form_salary') }}</label>
                         <input type="number" name="salary" id="salary" value="{{ old('salary', $jobVacancy->salary) }}"
                             class="{{ $errors->has('salary') ? 'outline-red-500 outline outline-1' : '' }} mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         @error('salary')
@@ -45,7 +44,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+                        <label for="type" class="block text-sm font-medium text-gray-700">{{ __('app.jobs.form_type') }}</label>
                         <select name="type" id="type"
                             class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm {{ $errors->has('type') ? 'outline-red-500 outline outline-1' : '' }}">
                             <option value="Full-Time" {{ old('type', $jobVacancy->type) == 'Full-Time' ? 'selected' : '' }}>Full-Time
@@ -61,7 +60,7 @@
 
                     <!-- Company Select Dropdown -->
                     <div class="mb-4">
-                        <label for="companyId" class="block text-sm font-medium text-gray-700">Company</label>
+                        <label for="companyId" class="block text-sm font-medium text-gray-700">{{ __('app.jobs.form_company') }}</label>
                         <select name="companyId" id="companyId"
                             class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm {{ $errors->has('company') ? 'outline-red-500 outline outline-1' : '' }}">
                             @foreach ($companies as $company)
@@ -75,7 +74,7 @@
 
                     <!-- Job Category Select Dropdown -->
                     <div class="mb-4">
-                        <label for="jobCategoryId" class="block text-sm font-medium text-gray-700">Job Category</label>
+                        <label for="jobCategoryId" class="block text-sm font-medium text-gray-700">{{ __('app.jobs.form_category') }}</label>
                         <select name="jobCategoryId" id="jobCategoryId"
                             class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm {{ $errors->has('jobCategoryId') ? 'outline-red-500 outline outline-1' : '' }}">
                             @foreach ($jobCategories as $jobCategory)
@@ -89,7 +88,7 @@
 
                     <!-- Job Description -->
                     <div class="mb-4">
-                        <label for="description" class="block text-sm font-medium text-gray-700">Job Description</label>
+                        <label for="description" class="block text-sm font-medium text-gray-700">{{ __('app.jobs.form_description') }}</label>
                         <textarea rows="4" name="description" id="description"
                             class="{{ $errors->has('description') ? 'outline-red-500 outline outline-1' : '' }} mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">{{ old('description', $jobVacancy->description) }}</textarea>
                         @error('description')
@@ -101,11 +100,11 @@
                 <div class="flex justify-end space-x-4">
                     <a href="{{ route('job-vacancies.index') }}"
                         class="px-4 py-2 rounded-md text-gray-500 hover:text-gray-700">
-                        Cancel
+                        {{ __('app.common.cancel') }}
                     </a>
                     <button type="submit"
                         class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Update Job Vacancy
+                        {{ __('app.jobs.update_job') }}
                     </button>
                 </div>
             </form>

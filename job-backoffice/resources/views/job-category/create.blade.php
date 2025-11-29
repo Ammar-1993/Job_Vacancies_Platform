@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Add Job Category') }}
+            {{ __('app.categories.create_title') }}
         </h2>
     </x-slot>
 
@@ -10,7 +10,7 @@
             <form action="{{ route('job-categories.store') }}" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700">Category Name</label>
+                    <label for="name" class="block text-sm font-medium text-gray-700">{{ __('app.categories.form_name') }}</label>
                     <input type="text" name="name" id="name" value="{{ old('name') }}"
                         class="{{ $errors->has('name') ? 'outline-red-500 outline outline-1' : '' }} mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     @error('name')
@@ -21,11 +21,11 @@
                 <div class="flex justify-end space-x-4">
                     <a href="{{ route('job-categories.index') }}"
                         class="px-4 py-2 rounded-md text-gray-500 hover:text-gray-700">
-                        Cancel
+                        {{ __('app.common.cancel') }}
                     </a>
                     <button type="submit"
                         class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Add Category
+                        {{ __('app.categories.add_btn') }}
                     </button>
                 </div>
             </form>
