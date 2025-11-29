@@ -21,4 +21,4 @@
     }
 @endphp
 
-<span class="inline-flex items-center px-2 py-0.5 rounded-full text-sm font-medium {{ $colorClass }}">{{ $text }}</span>
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $colorClass }}">{{ $text }}</span>

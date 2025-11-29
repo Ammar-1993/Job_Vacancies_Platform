@@ -1,6 +1,6 @@
-<nav class="w-[250px] h-screen bg-white border-r border-gray-200">
+<nav class="w-[280px] h-screen bg-white border-r border-gray-100 shadow-[4px_0_24px_rgba(0,0,0,0.02)] flex-shrink-0">
     <!-- Application logo -->
-    <div class="flex items-center px-6 border-b border-gray-200 py-4">
+    <div class="flex items-center px-8 border-b border-gray-50 py-6">
         <a href="{{ route('dashboard') }}" class="flex items-center space-x-2 rtl:space-x-reverse">
             <x-application-logo class="h-6 w-auto fill-current text-gray-800" />
             <span class="text-lg font-semibold text-gray-800">{{ __('app.nav.hire_me') }}</span>

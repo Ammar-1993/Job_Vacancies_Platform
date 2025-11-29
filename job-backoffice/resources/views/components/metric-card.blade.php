@@ -80,23 +80,23 @@
     $interactiveClasses = $hasHref ? "cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 {$ringColor}" : '';
 @endphp
 
-<div {{ $attributes->merge([ 'class' => "p-5 bg-white border border-gray-100 overflow-hidden shadow-sm rounded-lg {$interactiveClasses} metric-card transition duration-150 ease-in-out" ]) }} @if($hasHref) data-href="{{ $dataHref }}" tabindex="0" role="link" @endif>
+<div {{ $attributes->merge([ 'class' => "p-6 bg-white border border-gray-50 overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-xl {$interactiveClasses} metric-card transition-all duration-200 ease-in-out" ]) }} @if($hasHref) data-href="{{ $dataHref }}" tabindex="0" role="link" @endif>
     <div class="flex items-start justify-between">
         <div>
-            <h3 class="text-sm font-medium text-gray-600">{{ $title }}</h3>
-            <p class="mt-2 text-3xl font-bold {{ $colorClass }}">{{ $value }}</p>
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">{{ $title }}</h3>
+            <p class="mt-2 text-4xl font-bold {{ $colorClass }}">{{ $value }}</p>
         </div>
         
         {{-- Icon Display --}}
         @if ($icon)
-            <div class="p-3 rounded-xl {{ $bgColorClass }} {{ $colorClass }} shadow-inner flex items-center justify-center h-12 w-12">
+            <div class="p-3 rounded-2xl {{ $bgColorClass }} {{ $colorClass }} flex items-center justify-center h-14 w-14">
                 {!! $getIconSvg($icon) !!}
             </div>
         @endif
     </div>
     
     @if($subtitle)
-        <p class="mt-1 text-xs text-gray-500">{{ $subtitle }}</p>
+        <p class="mt-2 text-sm text-gray-400 font-medium">{{ $subtitle }}</p>
     @endif
 
     @if($spark)

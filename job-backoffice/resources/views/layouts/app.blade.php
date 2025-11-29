@@ -10,7 +10,7 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -20,7 +20,7 @@
     <div class="flex">
         @include('layouts.navigation')
 
-        <div class="flex-1 min-h-screen bg-gray-100">
+        <div class="flex-1 min-h-screen bg-gray-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white shadow">
