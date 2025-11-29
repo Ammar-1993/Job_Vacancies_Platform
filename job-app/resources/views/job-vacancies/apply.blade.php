@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-bold text-3xl text-white leading-tight">
-            Apply for: {{ $jobVacancy->title }}
+            {{ __('app.job.apply_for', ['title' => $jobVacancy->title]) }}
         </h2>
     </x-slot>
 
@@ -14,7 +14,7 @@
     -->
     <div class="py-12" x-data="{ 
         isProcessing: {{ $errors->any() ? 'false' : 'false' }}, 
-        feedbackMessage: 'Analyzing your resume with AI...' 
+        feedbackMessage: '{{ __('app.job.analyzing') }}' 
     }">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -22,7 +22,7 @@
             <a href="{{ route('job-vacancies.show', $jobVacancy->id) }}"
                 class="text-indigo-400 hover:text-indigo-300 font-medium transition duration-150 inline-flex items-center mb-8">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Back to Job Details
+                {{ __('app.job.back_to_details') }}
             </a>
 
             <!-- Application Card -->
@@ -35,7 +35,7 @@
                         @if(isset($jobVacancy->company) && $jobVacancy->company)
                             <span class="font-semibold text-indigo-400">{{ $jobVacancy->company->name }}</span>
                         @else
-                            <span class="text-red-500">Company Deleted</span>
+                            <span class="text-red-500">{{ __('app.dashboard.company_deleted') }}</span>
                         @endif
                     </p>
                     <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-gray-300">
@@ -73,11 +73,11 @@
 
                     <!-- Resume Selection Section -->
                     <div class="space-y-6">
-                        <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">Select or Upload Your Resume</h3>
+                        <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">{{ __('app.job.select_resume') }}</h3>
 
                         <!-- Existing Resumes -->
                         <fieldset class="space-y-4">
-                            <legend class="text-lg font-semibold text-gray-300 mb-3">Choose from existing files:</legend>
+                            <legend class="text-lg font-semibold text-gray-300 mb-3">{{ __('app.job.choose_existing') }}</legend>
                             <div class="space-y-3 p-4 bg-gray-900 rounded-lg border border-gray-700">
                                 @forelse($resumes as $resume)
                                     <div class="flex items-center">
@@ -89,7 +89,7 @@
                                         </label>
                                     </div>
                                 @empty
-                                    <p class="text-gray-400 text-sm p-2">No existing resumes found. Please upload a new one below.</p>
+                                    <p class="text-gray-400 text-sm p-2">{{ __('app.job.no_existing_resumes') }}</p>
                                 @endforelse
                             </div>
                         </fieldset>
@@ -100,7 +100,7 @@
                                 <div class="w-full border-t border-gray-700"></div>
                             </div>
                             <div class="relative flex justify-center text-sm">
-                                <span class="px-2 bg-gray-800 text-gray-500">OR</span>
+                                <span class="px-2 bg-gray-800 text-gray-500">{{ __('app.job.or') }}</span>
                             </div>
                         </div>
 
@@ -114,7 +114,7 @@
                             <div class="flex items-center mb-3">
                                 <input x-ref="newResumeRadio" type="radio" name="resume_option" id="new_resume" value="new_resume"
                                     class="form-radio h-5 w-5 text-indigo-500 bg-gray-700 border-gray-600 focus:ring-indigo-500 cursor-pointer" />
-                                <label class="ml-3 text-lg font-semibold text-gray-300 cursor-pointer" for="new_resume">Upload a new resume (PDF only)</label>
+                                <label class="ml-3 text-lg font-semibold text-gray-300 cursor-pointer" for="new_resume">{{ __('app.job.upload_new') }}</label>
                             </div>
                             
                             <label for="new_resume_file" class="block cursor-pointer">
@@ -154,9 +154,8 @@
                                     <svg class="w-10 h-10 mx-auto mb-2 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 014 4v16a2 2 0 01-2 2H5a2 2 0 01-2-2v-5l4-4zM16 12l-4-4m4 4l-4 4m4-4h-8"></path></svg>
 
                                     <template x-if="!fileName">
-                                        <div>
-                                            <p class="text-gray-400">Drag and drop your PDF here, or <span class="text-indigo-400 font-semibold">click to browse</span>.</p>
-                                            <p class="text-xs text-gray-500 mt-1">Maximum file size: 5MB</p>
+                                            <p class="text-gray-400">{{ __('app.job.drag_drop') }} <span class="text-indigo-400 font-semibold">{{ __('app.job.browse') }}</span>.</p>
+                                            <p class="text-xs text-gray-500 mt-1">{{ __('app.job.max_size') }}</p>
                                             <p x-show="hasError" x-text="errorMessage" class="text-red-400 text-sm mt-2 font-semibold"></p>
                                         </div>
                                     </template>
@@ -164,7 +163,7 @@
                                     <template x-if="fileName">
                                         <div>
                                             <p x-text="fileName" class="mt-2 text-indigo-400 font-medium"></p>
-                                            <p class="text-gray-400 text-sm mt-1">File ready. Click again to change.</p>
+                                            <p class="text-gray-400 text-sm mt-1">{{ __('app.job.file_ready') }}</p>
                                         </div>
                                     </template>
 
@@ -188,7 +187,7 @@
                             <div x-show="!isProcessing" class="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 group-hover:animate-shine"></div>
 
                             <span x-show="!isProcessing" class="flex items-center gap-2">
-                                Submit Application
+                                {{ __('app.job.submit_application') }}
                                 <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                             </span>
                             
@@ -197,7 +196,7 @@
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                Processing Application...
+                                {{ __('app.job.processing') }}
                             </span>
                         </button>
                     </div>
@@ -227,7 +226,7 @@
             </h3>
             
             <p class="mt-4 text-gray-400 text-lg font-light tracking-wide">
-                Analyzing your resume matches with AI...
+                {{ __('app.job.analyzing') }}
             </p>
             
             <div class="w-64 h-1 bg-gray-800 rounded-full mt-8 overflow-hidden">
