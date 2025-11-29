@@ -118,4 +118,19 @@ class JobVacancyController extends Controller
 // }
 
  
+    public function toggleSave(string $id)
+    {
+        $user = auth()->user();
+        $jobVacancy = JobVacancy::findOrFail($id);
+
+        if ($user->savedJobs()->where('jobVacancyId', $id)->exists()) {
+            $user->savedJobs()->detach($id);
+            $message = 'Job removed from saved list.';
+        } else {
+            $user->savedJobs()->attach($id);
+            $message = 'Job saved successfully.';
+        }
+
+        return back()->with('success', $message);
+    }
 }

@@ -110,20 +110,20 @@
                     <!-- Filters (Styled as dynamic badges/pills) -->
                     <div class="flex flex-wrap gap-2">
                         @php
-                            $filters = ['Full-Time' => 'Full-Time', 'Remote' => 'Remote', 'Hybrid' => 'Hybrid', 'Contract' => 'Contract'];
+                            $filters = \App\Enums\JobType::cases();
                         @endphp
 
-                        @foreach ($filters as $key => $label)
+                        @foreach ($filters as $type)
                             @php
-                                $isActive = request('filter') === $key;
+                                $isActive = request('filter') === $type->value;
                                 $class = $isActive 
                                     ? 'bg-indigo-600 text-white font-semibold ring-2 ring-indigo-300 shadow-md' 
                                     : 'bg-gray-700 text-gray-300 hover:bg-indigo-500/70 hover:text-white';
-                                $route = route('dashboard', ['filter' => $isActive ? null : $key, 'search' => request('search')]);
+                                $route = route('dashboard', ['filter' => $isActive ? null : $type->value, 'search' => request('search')]);
                             @endphp
                             <a href="{{ $route }}"
                                 class="{{ $class }} px-4 py-2 rounded-full text-sm transition duration-200 ease-in-out">
-                                {{ $label }}
+                                {{ $type->label() }}
                             </a>
                         @endforeach
                     </div>
@@ -178,6 +178,23 @@
                                         {{ $job->type }}
                                     </span>
                                     
+                                    <form action="{{ route('job-vacancies.save', $job->id) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        <button type="submit" class="p-2 rounded-full hover:bg-gray-700 transition duration-150 group" title="Save Job">
+                                            @if(auth()->user()->savedJobs->contains($job->id))
+                                                <!-- Filled Heart (Saved) -->
+                                                <svg class="w-6 h-6 text-pink-500 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                                </svg>
+                                            @else
+                                                <!-- Outline Heart (Not Saved) -->
+                                                <svg class="w-6 h-6 text-gray-400 group-hover:text-pink-500 transition duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                                </svg>
+                                            @endif
+                                        </button>
+                                    </form>
+
                                     <a href="{{ route('job-vacancies.show', $job->id) }}"
                                         class="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition duration-150 text-sm font-semibold">
                                         View Details

@@ -36,6 +36,7 @@ class JobVacancy extends Model
     {
         return [
             'deleted_at' => 'datetime',
+            'type' => \App\Enums\JobType::class,
         ];
     }
 
