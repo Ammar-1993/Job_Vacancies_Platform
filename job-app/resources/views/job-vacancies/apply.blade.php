@@ -105,7 +105,12 @@
                         </div>
 
                         <!-- Upload New Resume -->
-                        <div x-data="{ fileName: '', hasError: {{ $errors->has('resume_file') ? 'true' : 'false' }} }">
+                        <!-- Upload New Resume -->
+                        <div x-data="{ 
+                            fileName: '', 
+                            hasError: {{ $errors->has('resume_file') ? 'true' : 'false' }},
+                            errorMessage: ''
+                        }">
                             <div class="flex items-center mb-3">
                                 <input x-ref="newResumeRadio" type="radio" name="resume_option" id="new_resume" value="new_resume"
                                     class="form-radio h-5 w-5 text-indigo-500 bg-gray-700 border-gray-600 focus:ring-indigo-500 cursor-pointer" />
@@ -122,17 +127,38 @@
                                     }">
                                     
                                     <input @change="
-                                        fileName = $event.target.files[0] ? $event.target.files[0].name : ''; 
-                                        $refs.newResumeRadio.checked = $event.target.files[0] ? true : false;
-                                        hasError = false; // Clear error on new selection
+                                        const file = $event.target.files[0];
+                                        if (file) {
+                                            if (file.type !== 'application/pdf') {
+                                                hasError = true;
+                                                errorMessage = 'Only PDF files are allowed.';
+                                                fileName = '';
+                                                $event.target.value = ''; // Clear input
+                                            } else if (file.size > 5 * 1024 * 1024) {
+                                                hasError = true;
+                                                errorMessage = 'File size must be less than 5MB.';
+                                                fileName = '';
+                                                $event.target.value = ''; // Clear input
+                                            } else {
+                                                fileName = file.name;
+                                                $refs.newResumeRadio.checked = true;
+                                                hasError = false;
+                                                errorMessage = '';
+                                            }
+                                        } else {
+                                            fileName = '';
+                                        }
                                     " 
                                         type="file" name="resume_file" id="new_resume_file" class="hidden" accept="application/pdf" />
                                     
                                     <svg class="w-10 h-10 mx-auto mb-2 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 014 4v16a2 2 0 01-2 2H5a2 2 0 01-2-2v-5l4-4zM16 12l-4-4m4 4l-4 4m4-4h-8"></path></svg>
 
                                     <template x-if="!fileName">
-                                        <p class="text-gray-400">Drag and drop your PDF here, or <span class="text-indigo-400 font-semibold">click to browse</span>.</p>
-                                        <p class="text-xs text-gray-500 mt-1">Maximum file size: 5MB</p>
+                                        <div>
+                                            <p class="text-gray-400">Drag and drop your PDF here, or <span class="text-indigo-400 font-semibold">click to browse</span>.</p>
+                                            <p class="text-xs text-gray-500 mt-1">Maximum file size: 5MB</p>
+                                            <p x-show="hasError" x-text="errorMessage" class="text-red-400 text-sm mt-2 font-semibold"></p>
+                                        </div>
                                     </template>
 
                                     <template x-if="fileName">

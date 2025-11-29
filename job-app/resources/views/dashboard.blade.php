@@ -129,9 +129,33 @@
                     </div>
                 </div>
 
-                <!-- Job List -->
-                <div class="space-y-4 mt-6">
-                    @forelse ($jobs as $job)
+                <!-- Job List with Skeleton Loader -->
+                <div class="space-y-4 mt-6" x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 800)">
+                    
+                    <!-- Skeleton Loader -->
+                    <template x-if="loading">
+                        <div class="space-y-4">
+                            @for ($i = 0; $i < 3; $i++)
+                                <div class="bg-gray-800/60 p-6 rounded-xl shadow-lg border border-gray-700/50 animate-pulse">
+                                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                                        <div class="w-full">
+                                            <div class="h-6 bg-gray-700 rounded w-1/3 mb-4"></div>
+                                            <div class="h-4 bg-gray-700 rounded w-1/4 mb-2"></div>
+                                            <div class="h-4 bg-gray-700 rounded w-1/5"></div>
+                                        </div>
+                                        <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                                            <div class="h-8 bg-gray-700 rounded w-20"></div>
+                                            <div class="h-10 bg-gray-700 rounded w-24"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endfor
+                        </div>
+                    </template>
+
+                    <!-- Actual Content -->
+                    <div x-show="!loading" style="display: none;">
+                        @forelse ($jobs as $job)
                         <!-- Job Item Card -->
                         <div class="bg-gray-800/60 p-6 rounded-xl shadow-lg hover:bg-gray-700/70 transition duration-200 border border-gray-700/50">
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -208,6 +232,7 @@
                             <p class="text-gray-400 mt-2">Try clearing the filters or changing your search term.</p>
                         </div>
                     @endforelse
+                    </div>
                 </div>
 
                 <!-- Pagination Links -->
