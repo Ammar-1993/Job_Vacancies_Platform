@@ -133,14 +133,17 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="4" class="px-6 py-10 text-center text-gray-500">
-                                        <p>{{ __('app.applications.no_applications') }}</p>
-                                    </td>
-                                </tr>
                             @endforelse
                         </tbody>
                     </table>
+                    
+                    @if($jobApplications->isEmpty())
+                        <x-empty-state
+                            icon="clipboard"
+                            title="{{ __('app.empty_states.applications.title') }}"
+                            description="{{ __('app.empty_states.applications.description') }}"
+                        />
+                    @endif
                 </div>
 
                 @if($jobApplications->hasPages())

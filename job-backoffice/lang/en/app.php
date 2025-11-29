@@ -212,4 +212,29 @@ return [
         'change_password' => 'Change User Password',
         'update_password_btn' => 'Update User Password',
     ],
+    'empty_states' => [
+        'jobs' => [
+            'title' => 'No Job Vacancies Yet',
+            'description' => 'Get started by creating your first job vacancy to attract talented candidates.',
+            'action' => 'Create First Job',
+        ],
+        'applications' => [
+            'title' => 'No Applications Yet',
+            'description' => 'Applications will appear here when candidates apply to your job vacancies.',
+        ],
+        'companies' => [
+            'title' => 'No Companies Yet',
+            'description' => 'Start by adding companies to manage their job vacancies and applications.',
+            'action' => 'Add First Company',
+        ],
+        'categories' => [
+            'title' => 'No Categories Yet',
+            'description' => 'Create job categories to organize and classify your vacancies.',
+            'action' => 'Add First Category',
+        ],
+        'users' => [
+            'title' => 'No Users Found',
+            'description' => 'No users match your current search criteria.',
+        ],
+    ],
 ];

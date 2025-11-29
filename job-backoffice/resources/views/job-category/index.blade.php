@@ -89,12 +89,19 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="2" class="px-6 py-10 text-center text-gray-500">{{ __('app.categories.no_categories') }}</td>
-                                </tr>
                             @endforelse
                         </tbody>
                     </table>
+                    
+                    @if($categories->isEmpty())
+                        <x-empty-state
+                            icon="folder"
+                            title="{{ __('app.empty_states.categories.title') }}"
+                            description="{{ __('app.empty_states.categories.description') }}"
+                            actionText="{{ __('app.empty_states.categories.action') }}"
+                            actionUrl="{{ route('job-categories.create') }}"
+                        />
+                    @endif
                 </div>
 
                 @if($categories->hasPages())

@@ -130,17 +130,17 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="4" class="px-6 py-10 text-center text-gray-500">
-                                        <div class="flex flex-col items-center justify-center">
-                                            <svg class="h-10 w-10 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                                            <p>{{ __('app.users.no_users') }}</p>
-                                        </div>
-                                    </td>
-                                </tr>
                             @endforelse
                         </tbody>
                     </table>
+                    
+                    @if($users->isEmpty())
+                        <x-empty-state
+                            icon="users"
+                            title="{{ __('app.empty_states.users.title') }}"
+                            description="{{ __('app.empty_states.users.description') }}"
+                        />
+                    @endif
                 </div>
                 
                 @if($users->hasPages())

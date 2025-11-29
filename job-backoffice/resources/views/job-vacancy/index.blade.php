@@ -109,12 +109,19 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="4" class="px-6 py-10 text-center text-gray-500">{{ __('app.jobs.no_jobs') }}</td>
-                                </tr>
                             @endforelse
                         </tbody>
                     </table>
+                    
+                    @if($jobVacancies->isEmpty())
+                        <x-empty-state
+                            icon="briefcase"
+                            title="{{ __('app.empty_states.jobs.title') }}"
+                            description="{{ __('app.empty_states.jobs.description') }}"
+                            actionText="{{ __('app.empty_states.jobs.action') }}"
+                            actionUrl="{{ route('job-vacancies.create') }}"
+                        />
+                    @endif
                 </div>
 
                 @if($jobVacancies->hasPages())

@@ -121,17 +121,19 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="4" class="px-6 py-10 text-center text-gray-500">
-                                        <div class="flex flex-col items-center justify-center">
-                                            <svg class="h-10 w-10 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                                            <p>{{ __('app.companies.no_companies') }}</p>
-                                        </div>
-                                    </td>
-                                </tr>
                             @endforelse
                         </tbody>
                     </table>
+                    
+                    @if($companies->isEmpty())
+                        <x-empty-state
+                            icon="building"
+                            title="{{ __('app.empty_states.companies.title') }}"
+                            description="{{ __('app.empty_states.companies.description') }}"
+                            actionText="{{ __('app.empty_states.companies.action') }}"
+                            actionUrl="{{ route('companies.create') }}"
+                        />
+                    @endif
                 </div>
 
                 @if($companies->hasPages())
