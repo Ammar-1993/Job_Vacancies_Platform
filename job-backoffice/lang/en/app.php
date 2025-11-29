@@ -15,6 +15,11 @@ return [
         'archived' => 'Archived',
         'back' => 'Back',
         'all_statuses' => 'All Statuses',
+        'success' => 'Success',
+        'close' => 'Close',
+        'error' => 'Error',
+        'warning' => 'Warning',
+        'info' => 'Information',
     ],
     'nav' => [
         'dashboard' => 'Dashboard',

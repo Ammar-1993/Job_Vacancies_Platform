@@ -36,6 +36,9 @@
             </main>
         </div>
     </div>
+    
+    <!-- Toast Notifications -->
+    <x-toast-notification />
 </body>
 
 </html>
