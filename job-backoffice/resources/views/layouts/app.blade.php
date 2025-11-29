@@ -28,6 +28,7 @@
                         <!-- Toggle Button (Attractive Hamburger Menu) -->
                         <button 
                             @click="sidebarOpen = !sidebarOpen"
+                            aria-label="Toggle sidebar"
                             class="p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-200 border border-gray-200 group flex-shrink-0">
                             <!-- Hamburger Icon (transforms to X) -->
                             <div class="w-5 h-4 flex flex-col justify-between">

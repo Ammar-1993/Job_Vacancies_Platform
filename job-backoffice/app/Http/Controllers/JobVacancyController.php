@@ -88,7 +88,7 @@ class JobVacancyController extends Controller
      */
     public function show(string $id)
     {
-        $jobVacancy = JobVacancy::findOrFail($id);
+        $jobVacancy = JobVacancy::with(['company' => function($q) { $q->withTrashed(); }, 'jobCategory'])->findOrFail($id);
         return view('job-vacancy.show', compact('jobVacancy'));
     }
 

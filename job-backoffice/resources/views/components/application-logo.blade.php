@@ -8,5 +8,5 @@
   <rect width="100" height="100" rx="20" ry="20" fill="url(#grad1)" />
   <path fill="#FFFFFF" d="M30 70 L50 40 L70 70 Z" />
   <circle cx="50" cy="55" r="8" fill="#FFFFFF" />
-  <text x="50" y="88" font-family="Arial, sans-serif" font-size="12" fill="white" font-weight="bold" text-anchor="middle" alignment-baseline="middle">JobVac</text>
+  <text x="50" y="88" font-family="Arial, sans-serif" font-size="12" fill="white" font-weight="bold" text-anchor="middle" alignment-baseline="middle">Hire Me</text>
 </svg>

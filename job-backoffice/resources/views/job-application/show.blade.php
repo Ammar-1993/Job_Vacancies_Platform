@@ -33,31 +33,31 @@
                     @if($jobApplication->user)
                         {{ $jobApplication->user->name }}
                     @else
-                        <span class="text-sm text-gray-500">{{ __('app.applications.user_deleted') }}</span>
+                        <span class="text-sm text-gray-600">{{ __('app.applications.user_deleted') }}</span>
                     @endif
                 </p>
                 <p><strong>{{ __('app.applications.job_vacancy') }}:</strong>
                     @if($jobApplication->jobVacancy)
                         {{ $jobApplication->jobVacancy->title }}
                     @else
-                        <span class="text-sm text-gray-500">{{ __('app.applications.job_removed') }}</span>
+                        <span class="text-sm text-gray-600">{{ __('app.applications.job_removed') }}</span>
                     @endif
                 </p>
                 <p><strong>{{ __('app.dashboard.company') }}:</strong>
                     @if($jobApplication->jobVacancy && $jobApplication->jobVacancy->company)
                         {{ $jobApplication->jobVacancy->company->name }}
                     @else
-                        <span class="text-sm text-gray-500">{{ __('app.applications.company_deleted') }}</span>
+                        <span class="text-sm text-gray-600">{{ __('app.applications.company_deleted') }}</span>
                     @endif
                 </p>
                 <p><strong>{{ __('app.applications.status') }}:</strong> <span
-                        class="@if($jobApplication->status == 'accepted') text-green-500 @elseif($jobApplication->status == 'rejected') text-red-500 @else text-purple-500 @endif">{{ $jobApplication->status }}
+                        class="@if($jobApplication->status == 'accepted') text-green-600 @elseif($jobApplication->status == 'rejected') text-red-600 @else text-purple-600 @endif">{{ $jobApplication->status }}
                     </span></p>
                 <p><strong>{{ __('app.applications.resume_tab') }}:</strong>
                     @if($jobApplication->resume && $jobApplication->resume->fileUri)
                         <a class="text-blue-500 hover:text-blue-700 underline" href="{{ $jobApplication->resume->fileUri }}" target="_blank">{{ $jobApplication->resume->fileUri }}</a>
                     @else
-                        <span class="text-sm text-gray-500">{{ __('app.applications.no_resume') }}</span>
+                        <span class="text-sm text-gray-600">{{ __('app.applications.no_resume') }}</span>
                     @endif
                 </p>
             </div>

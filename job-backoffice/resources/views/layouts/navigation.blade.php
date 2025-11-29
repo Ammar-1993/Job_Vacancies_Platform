@@ -138,21 +138,23 @@
 
         <hr class="border-gray-100 my-2" />
 
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <x-nav-link href="#" :active="false" class="text-red-500 hover:bg-red-50 hover:text-red-600 focus:text-red-600"
-                onclick="event.preventDefault(); this.closest('form').submit();">
-                <span class="flex items-center transition-all duration-300"
-                      :class="sidebarOpen ? 'justify-start' : 'justify-center w-full'">
-                    {{-- Icon: LogOut --}}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500 group-hover:text-red-600 group-focus:text-red-600"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg>
-                    <span x-show="sidebarOpen" 
-                          x-transition:enter="transition ease-out duration-200 delay-100"
-                          x-transition:enter-start="opacity-0 translate-x-2"
-                          x-transition:enter-end="opacity-100 translate-x-0"
-                          class="ml-3 whitespace-nowrap">{{ __('app.nav.logout') }}</span>
-                </span>
-            </x-nav-link>
-        </form>
+        <li>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <a href="#" class="flex items-center px-4 py-3 w-full text-sm font-medium text-red-500 hover:bg-red-50 hover:text-red-600 focus:text-red-600 transition duration-150 ease-in-out focus:outline-none"
+                    onclick="event.preventDefault(); this.closest('form').submit();">
+                    <span class="flex items-center transition-all duration-300"
+                          :class="sidebarOpen ? 'justify-start' : 'justify-center w-full'">
+                        {{-- Icon: LogOut --}}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500 group-hover:text-red-600 group-focus:text-red-600"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg>
+                        <span x-show="sidebarOpen" 
+                              x-transition:enter="transition ease-out duration-200 delay-100"
+                              x-transition:enter-start="opacity-0 translate-x-2"
+                              x-transition:enter-end="opacity-100 translate-x-0"
+                              class="ml-3 whitespace-nowrap">{{ __('app.nav.logout') }}</span>
+                    </span>
+                </a>
+            </form>
+        </li>
     </ul>
 </nav>
