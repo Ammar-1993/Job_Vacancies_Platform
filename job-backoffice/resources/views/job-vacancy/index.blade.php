@@ -48,7 +48,8 @@
 
             <!-- Job Vacancy Table -->
             <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-100">
-                <div class="overflow-x-auto">
+                <!-- Desktop Table (hidden on mobile) -->
+                <div class="hidden md:block overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
@@ -112,6 +113,81 @@
                             @endforelse
                         </tbody>
                     </table>
+                    
+                    @if($jobVacancies->isEmpty())
+                        <x-empty-state
+                            icon="briefcase"
+                            title="{{ __('app.empty_states.jobs.title') }}"
+                            description="{{ __('app.empty_states.jobs.description') }}"
+                            actionText="{{ __('app.empty_states.jobs.action') }}"
+                            actionUrl="{{ route('job-vacancies.create') }}"
+                        />
+                    @endif
+                </div>
+                
+                <!-- Mobile Cards (hidden on desktop) -->
+                <div class="md:hidden">
+                    @forelse($jobVacancies as $jobVacancy)
+                        <div class="border-b border-gray-100 last:border-b-0 p-4 hover:bg-gray-50 transition-colors">
+                            <div class="space-y-3">
+                                <!-- Title and Company -->
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">
+                                        @if(request('archived') != 'true')
+                                            <a href="{{ route('job-vacancies.show', $jobVacancy->id) }}" class="text-primary-600 hover:underline">
+                                                {{ $jobVacancy->title }}
+                                            </a>
+                                        @else
+                                            {{ $jobVacancy->title }}
+                                        @endif
+                                    </h3>
+                                    @if(auth()->user()->role == 'admin')
+                                        <p class="text-sm text-gray-500 mt-1">{{ $jobVacancy->company?->name ?? __('app.dashboard.company_deleted') }}</p>
+                                    @endif
+                                </div>
+                                
+                                <!-- Location & Type -->
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    {{ $jobVacancy->location }} • <span class="ml-1 px-2 py-0.5 bg-gray-100 rounded-full text-xs">{{ $jobVacancy->type }}</span>
+                                </div>
+                                
+                                <!-- Salary -->
+                                <div class="flex items-center text-sm text-gray-600 font-mono">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    ${{ number_format($jobVacancy->salary, 0) }}
+                                </div>
+                                
+                                <!-- Actions -->
+                                @if(request('archived') == 'true')
+                                    <form action="{{ route('job-vacancies.restore', $jobVacancy->id) }}" method="POST" class="pt-3 border-t border-gray-100">
+                                        @csrf @method('PUT')
+                                        <button type="submit" class="w-full px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium hover:bg-green-100 transition-colors">
+                                            {{ __('app.common.restore') }}
+                                        </button>
+                                    </form>
+                                @else
+                                    <div class="flex space-x-2 pt-3 border-t border-gray-100">
+                                        <a href="{{ route('job-vacancies.edit', $jobVacancy->id) }}" class="flex-1 text-center px-4 py-2 bg-primary-50 text-primary-700 rounded-lg text-sm font-medium hover:bg-primary-100 transition-colors">
+                                            {{ __('app.common.edit') }}
+                                        </a>
+                                        <form action="{{ route('job-vacancies.destroy', $jobVacancy->id) }}" method="POST" onsubmit="return confirm('{{ __('app.jobs.confirm_archive') }}');" class="flex-1">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="w-full px-4 py-2 bg-red-50 text-red-700 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors">
+                                                {{ __('app.common.archive') }}
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                    @endforelse
                     
                     @if($jobVacancies->isEmpty())
                         <x-empty-state
