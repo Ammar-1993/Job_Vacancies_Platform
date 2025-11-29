@@ -1,4 +1,5 @@
-<x-main-layout title="{{ __('app.welcome.title') }}">
+
+<x-main-layout title="Hire Me - Find your dream job">
     <div x-data="{ show: false }" x-init="setTimeout(() => show = true, 300)">
         <div class="inline-flex items-center mb-2" x-cloak x-show="show"
             x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 scale-90"
@@ -11,8 +12,8 @@
         <div x-cloak x-show="show" x-transition:enter="transition ease-out duration-700"
             x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100">
             <h1 class="text-4xl sm:text-6xl md:text-8xl font-bold mb-6 tracking-tight">
-                <span class="text-white">{{ __('app.welcome.hero_title_part1') }}</span><br />
-                <span class="text-white/60 font-serif italic">{{ __('app.welcome.hero_title_part2') }}</span>
+                <span class="text-white">{{ __('app.welcome.hero_title1') }}</span><br />
+                <span class="text-white/60 font-serif italic">{{ __('app.welcome.hero_title2') }}</span>
             </h1>
         </div>
     </div>
@@ -20,7 +21,7 @@
     <div x-data="{ show: false }" x-init="setTimeout(() => show = true, 300)">
         <div class="mb-6" x-cloak x-show="show" x-transition:enter="transition ease-out duration-700"
             x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100">
-            <p class="text-white/60 text-lg">{{ __('app.welcome.hero_subtitle') }}</p>
+            <p class="text-white/60 text-lg"> {{ __('app.welcome.hero_subtitle') }}</p>
         </div>
     </div>
 

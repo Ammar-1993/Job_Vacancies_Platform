@@ -2,7 +2,9 @@
 
 return [
     'welcome' => [
-        'hero_title' => 'Find your Dream Job',
+        'hero_title1' => 'Find your',
+        'hero_title2' => 'Dream Job',
+
         'hero_subtitle' => 'Connect with top employers and find exciting opportunities.',
         'hire_me' => 'Hire me',
         'create_account' => 'Create an Account',
