@@ -51,7 +51,7 @@
                     @endif
                 </p>
                 <p><strong>{{ __('app.applications.status') }}:</strong> <span
-                        class="@if($jobApplication->status == 'accepted') text-green-600 @elseif($jobApplication->status == 'rejected') text-red-600 @else text-purple-600 @endif">{{ $jobApplication->status }}
+                        class="@if($jobApplication->status->value == 'accepted') text-green-600 @elseif($jobApplication->status->value == 'rejected') text-red-600 @else text-purple-600 @endif">{{ __('app.applications.status_' . $jobApplication->status->value) }}
                     </span></p>
                 <p><strong>{{ __('app.applications.resume_tab') }}:</strong>
                     @if($jobApplication->resume && $jobApplication->resume->fileUri)

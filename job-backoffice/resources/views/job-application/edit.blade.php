@@ -58,11 +58,11 @@
                         <label for="status" class="block text-sm font-medium text-gray-700">{{ __('app.applications.status') }}</label>
                         <select name="status" id="status"
                             class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm {{ $errors->has('status') ? 'outline-red-500 outline outline-1' : '' }}">
-                            <option value="pending" {{ old('status', $jobApplication->status) == 'pending' ? 'selected' : '' }}>Pending - Under Review
+                            <option value="pending" {{ old('status', $jobApplication->status->value) == 'pending' ? 'selected' : '' }}>{{ __('app.applications.status_pending') }}
                             </option>
-                            <option value="rejected" {{ old('status', $jobApplication->status) == 'rejected' ? 'selected' : '' }}>Rejected - Disqualified
+                            <option value="rejected" {{ old('status', $jobApplication->status->value) == 'rejected' ? 'selected' : '' }}>{{ __('app.applications.status_rejected') }}
                             </option>
-                            <option value="accepted" {{ old('status', $jobApplication->status) == 'accepted' ? 'selected' : '' }}>Accepted - Qualified
+                            <option value="accepted" {{ old('status', $jobApplication->status->value) == 'accepted' ? 'selected' : '' }}>{{ __('app.applications.status_accepted') }}
                             </option>
                         </select>
                         @error('status')

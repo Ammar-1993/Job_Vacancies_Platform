@@ -34,9 +34,9 @@
                         <!-- Status Filter -->
                         <select name="status" onchange="this.form.submit()" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-600">
                             <option value="">{{ __('app.common.all_statuses') }}</option>
-                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="accepted" {{ request('status') == 'accepted' ? 'selected' : '' }}>Accepted</option>
-                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>{{ __('app.applications.status_pending') }}</option>
+                            <option value="accepted" {{ request('status') == 'accepted' ? 'selected' : '' }}>{{ __('app.applications.status_accepted') }}</option>
+                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>{{ __('app.applications.status_rejected') }}</option>
                         </select>
 
                         <!-- Search Input -->
@@ -100,10 +100,10 @@
                                                 'rejected' => 'bg-red-100 text-red-800 border-red-200',
                                                 'pending'  => 'bg-yellow-100 text-yellow-800 border-yellow-200',
                                             ];
-                                            $colorClass = $statusColors[$jobApplication->status] ?? 'bg-gray-100 text-gray-800 border-gray-200';
+                                            $colorClass = $statusColors[$jobApplication->status->value] ?? 'bg-gray-100 text-gray-800 border-gray-200';
                                         @endphp
                                         <span class="px-2.5 py-0.5 inline-flex text-xs font-medium border rounded-full {{ $colorClass }} capitalize">
-                                            {{ $jobApplication->status }}
+                                            {{ __('app.applications.status_' . $jobApplication->status->value) }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

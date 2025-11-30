@@ -36,6 +36,7 @@ class JobApplication extends Model
     {
         return [
             'deleted_at' => 'datetime',
+            'status' => \App\Enums\JobStatus::class,
         ];
     }
 

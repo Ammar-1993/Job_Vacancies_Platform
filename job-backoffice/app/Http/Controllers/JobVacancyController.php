@@ -8,6 +8,8 @@ use App\Models\Company;
 use App\Models\JobCategory;
 use App\Http\Requests\JobVacancyCreateRequest;
 use App\Http\Requests\JobVacancyUpdateRequest;
+use App\Enums\JobType;
+
 class JobVacancyController extends Controller
 {
     /**
@@ -70,7 +72,8 @@ class JobVacancyController extends Controller
     {
         $companies = Company::all();
         $jobCategories = JobCategory::all();
-        return view('job-vacancy.create', compact('companies', 'jobCategories'));
+        $jobTypes = JobType::cases();
+        return view('job-vacancy.create', compact('companies', 'jobCategories', 'jobTypes'));
     }
 
     /**
@@ -100,7 +103,8 @@ class JobVacancyController extends Controller
         $jobVacancy = JobVacancy::findOrFail($id);
         $companies = Company::all();
         $jobCategories = JobCategory::all();
-        return view('job-vacancy.edit', compact('jobVacancy', 'companies', 'jobCategories'));
+        $jobTypes = JobType::cases();
+        return view('job-vacancy.edit', compact('jobVacancy', 'companies', 'jobCategories', 'jobTypes'));
     }
 
     /**

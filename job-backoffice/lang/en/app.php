@@ -140,6 +140,18 @@ return [
         'no_resume' => 'No resume available',
         'view_resume' => 'View',
         'applied_to' => 'Applied to',
+        'status_pending' => 'Pending',
+        'status_accepted' => 'Accepted',
+        'status_rejected' => 'Rejected',
+    ],
+    'job_types' => [
+        'full_time' => 'Full-Time',
+        'part_time' => 'Part-Time',
+        'remote' => 'Remote',
+        'hybrid' => 'Hybrid',
+        'contract' => 'Contract',
+        'internship' => 'Internship',
+        'freelance' => 'Freelance',
     ],
     'companies' => [
         'directory_title' => 'Companies Directory',
