@@ -10,7 +10,7 @@ The platform distinguishes itself by integrating **Artificial Intelligence** int
 ## 🎯 Core Objectives
 
 * **For Job Seekers:** Simplify job discovery and provide actionable, AI-driven feedback on applications.
-* **For Employers:** Automate initial screening and provide a centralized dashboard for managing vacancies and applicants.
+* **For Company Owner:** Automate initial screening and provide a centralized dashboard for managing vacancies and applicants.
 * **For Administrators:** Maintain platform integrity through rigorous role-based and ownership-based access controls (RBAC/OBAC).
 
 ---
