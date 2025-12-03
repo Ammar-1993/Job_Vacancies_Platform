@@ -1,7 +1,7 @@
 # 🚀 Job Vacancies Platform (Monorepo)
 
 ## 🌟 Comprehensive Overview
-**Job Vacancies Platform** is an enterprise-grade recruitment ecosystem designed to streamline the entire hiring lifecycle. It connects talented job seekers with employers through a seamless, intelligent, and secure interface.
+**Job Vacancies Platform** is an enterprise-grade recruitment ecosystem designed to streamline the entire hiring lifecycle. It connects talented job seekers with company owners through a seamless, intelligent, and secure interface.
 
 The platform distinguishes itself by integrating **Artificial Intelligence** into the recruitment process, offering real-time resume analysis and compatibility scoring. Built on a robust **Monorepo Architecture**, it ensures code reusability, consistency, and scalability across its multiple applications.
 
