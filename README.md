@@ -29,9 +29,9 @@ Job_Vacancies_Platform/
 ├── 📂 job-backoffice/   # (Private) Admin & HR Dashboard
 │   ├── Company & Job Management
 │   ├── Application Review Workflow
+│   ├── Database Migrations & Seeders
 │   └── System Analytics
 │
 └── 📂 job-shared/       # (Core) Shared Kernel
-    ├── Eloquent Models (User, JobVacancy, Resume)
-    ├── Database Migrations & Seeders
+    ├── Eloquent Models (User, JobVacancy, Resume,...)
     └── Enums & Shared Logic
