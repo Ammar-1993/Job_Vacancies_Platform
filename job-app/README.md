@@ -128,7 +128,7 @@ php artisan serve
 
 | Technology | Rationale |
 | :--- | :--- |
-| **Laravel 11** | Chosen for its robust MVC architecture, security features, and powerful Queue system for handling AI tasks. |
+| **Laravel 12** | Chosen for its robust MVC architecture, security features, and powerful Queue system for handling AI tasks. |
 | **Tailwind CSS** | Facilitates rapid UI development with a utility-first approach, ensuring a modern and responsive design. |
 | **OpenAI API** | The core of the "Smart Evaluation" feature, providing natural language processing capabilities to analyze resumes. |
 | **MySQL + UUID** | Ensures data integrity and security by preventing sequential ID enumeration attacks. |
