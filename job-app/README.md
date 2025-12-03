@@ -1,25 +1,24 @@
-🚀 Job App - Candidate Portal
+# 🚀 Job App - Candidate Portal
 
-📖 Project Overview
+## 📖 Project Overview
+**Job App** is the public-facing interface of the **Job Vacancies Platform**. It is a modern, responsive web application designed specifically for **Job Seekers**.
 
-Job App is the public-facing interface of the Job Vacancies Platform. It is a modern, responsive web application designed specifically for Job Seekers.
+The primary objective of this application is to bridge the gap between talent and opportunity by providing a seamless, AI-enhanced recruitment experience. Unlike traditional job boards, **Job App** integrates **Artificial Intelligence** to analyze candidate resumes in real-time, providing compatibility scores and actionable feedback before an application reaches the employer.
 
-The primary objective of this application is to bridge the gap between talent and opportunity by providing a seamless, AI-enhanced recruitment experience. Unlike traditional job boards, Job App integrates Artificial Intelligence to analyze candidate resumes in real-time, providing compatibility scores and actionable feedback before an application reaches the employer.
+---
 
-⚙️ Mechanism of Action
+## ⚙️ Mechanism of Action
+1. **Browse:** Candidates search and filter job vacancies fetched from the central database.
+2. **Apply:** Users submit applications by uploading their Resume (PDF).
+3. **Analyze:** The system (via Background Queues) parses the resume using **OpenAI**, comparing skills against the job description.
+4. **Feedback:** The candidate receives an AI-generated compatibility score and tips for improvement.
 
-Browse: Candidates search and filter job vacancies fetched from the central database.
+---
 
-Apply: Users submit applications by uploading their Resume (PDF).
+## 🏗️ Project Structure & Architecture
+This project operates within a **Monorepo** ecosystem, sharing resources with the `job-backoffice`.
 
-Analyze: The system (via Background Queues) parses the resume using OpenAI, comparing skills against the job description.
-
-Feedback: The candidate receives an AI-generated compatibility score and tips for improvement.
-
-🏗️ Project Structure & Architecture
-
-This project operates within a Monorepo ecosystem, sharing resources with the job-backoffice.
-
+```text
 job-app/
 ├── app/
 │   ├── Http/Controllers/  # Handles requests (Jobs, Applications, Auth)
@@ -31,59 +30,60 @@ job-app/
 ├── routes/                # Web & Auth routes
 ├── config/                # App configuration (Filesystems, Services)
 └── composer.json          # Dependency manager (Links to job-shared)
+````
 
+### Key Architectural Concepts
 
-Key Architectural Concepts
+  * **Shared Kernel:** The application relies on `../job-shared` for Eloquent Models (`User`, `JobVacancy`, `Resume`) and Enums to ensure a **Single Source of Truth**.
+  * **Secure Storage:** Resumes are stored in a private disk (`storage/app/resumes`) to ensure GDPR compliance and user privacy.
+  * **UUIDs:** All primary keys use UUIDs for enhanced security and scalability.
 
-Shared Kernel: The application relies on ../job-shared for Eloquent Models (User, JobVacancy, Resume) and Enums to ensure a Single Source of Truth.
+-----
 
-Secure Storage: Resumes are stored in a private disk (storage/app/resumes) to ensure GDPR compliance and user privacy.
-
-UUIDs: All primary keys use UUIDs for enhanced security and scalability.
-
-💻 Operating Requirements
+## 💻 Operating Requirements
 
 Ensure your environment meets the following specifications before installation:
 
-PHP: Version 8.2 or higher.
+  * **PHP:** Version 8.2 or higher.
+  * **Database:** MySQL 8.0+ or MariaDB 10.10+ (Dockerized).
+  * **Extensions:** `BCMath`, `Ctype`, `Fileinfo`, `JSON`, `Mbstring`, `OpenSSL`, `PDO`, `Tokenizer`, `XML`.
+  * **Composer:** Latest version.
+  * **Node.js & NPM:** For compiling frontend assets.
+  * **OpenAI API Key:** For the AI analysis features.
 
-Database: MySQL 8.0+ or MariaDB 10.10+ (Dockerized).
+-----
 
-Extensions: BCMath, Ctype, Fileinfo, JSON, Mbstring, OpenSSL, PDO, Tokenizer, XML.
-
-Composer: Latest version.
-
-Node.js & NPM: For compiling frontend assets.
-
-OpenAI API Key: For the AI analysis features.
-
-🛠️ Installation & Commissioning
+## 🛠️ Installation & Commissioning
 
 Follow these steps to get the project running from scratch.
 
-1. Clone & Navigate
+### 1\. Clone & Navigate
 
+```bash
 git clone [https://github.com/Ammar-1993/Job_Vacancies_Platform.git](https://github.com/Ammar-1993/Job_Vacancies_Platform.git)
 cd Job_Vacancies_Platform/job-app
+```
 
+### 2\. Install Backend Dependencies
 
-2. Install Backend Dependencies
+*Since this app depends on `job-shared`, ensure the path is accessible.*
 
-Since this app depends on job-shared, ensure the path is accessible.
-
+```bash
 composer install
 composer dump-autoload
+```
 
-
-3. Environment Configuration
+### 3\. Environment Configuration
 
 Duplicate the example environment file:
 
+```bash
 cp .env.example .env
+```
 
+Update the `.env` file with your configuration:
 
-Update the .env file with your configuration:
-
+```dotenv
 APP_NAME="Job App"
 APP_URL=http://localhost:8000
 
@@ -97,119 +97,113 @@ DB_PASSWORD=root
 
 # OpenAI Integration
 OPENAI_API_KEY=sk-your-api-key-here
+```
 
+### 4\. Install Frontend Dependencies
 
-4. Install Frontend Dependencies
-
+```bash
 npm install
 npm run build
+```
 
-
-5. Link Storage
+### 5\. Link Storage
 
 Create the symbolic link for public assets (Images/CSS), while keeping resumes private.
 
+```bash
 php artisan storage:link
+```
 
+### 6\. Run the Application
 
-6. Run the Application
-
+```bash
 php artisan serve
+```
 
+> The application will be accessible at [http://localhost:8000](https://www.google.com/search?q=http://localhost:8000).
 
-The application will be accessible at http://localhost:8000.
+-----
 
-🧠 Technologies Used
+## 🧠 Technologies Used
 
-Technology
+| Technology | Rationale |
+| :--- | :--- |
+| **Laravel 11** | Chosen for its robust MVC architecture, security features, and powerful Queue system for handling AI tasks. |
+| **Tailwind CSS** | Facilitates rapid UI development with a utility-first approach, ensuring a modern and responsive design. |
+| **OpenAI API** | The core of the "Smart Evaluation" feature, providing natural language processing capabilities to analyze resumes. |
+| **MySQL + UUID** | Ensures data integrity and security by preventing sequential ID enumeration attacks. |
+| **Docker** | Provides a consistent development environment across different machines. |
 
-Rationale
+-----
 
-Laravel 11
+## ✨ Key Features
 
-Chosen for its robust MVC architecture, security features, and powerful Queue system for handling AI tasks.
+  * ✅ **Smart Job Search:** Filter jobs by type (Remote, Full-time), location, and salary.
+  * ✅ **One-Click Apply:** Streamlined application process with PDF upload validation.
+  * ✅ **AI Compatibility Score:** Get instant feedback on how well your resume matches the job description.
+  * ✅ **Application Tracking:** Monitor the status of your applications (Pending, Accepted, Rejected).
+  * ✅ **Secure Profile:** Manage personal information and password securely.
 
-Tailwind CSS
+-----
 
-Facilitates rapid UI development with a utility-first approach, ensuring a modern and responsive design.
+## 🤝 How to Contribute
 
-OpenAI API
+We welcome contributions\! Please follow these steps:
 
-The core of the "Smart Evaluation" feature, providing natural language processing capabilities to analyze resumes.
+1.  **Fork** the repository.
+2.  Create a **Feature Branch** (`git checkout -b feature/AmazingFeature`).
+3.  **Commit** your changes (`git commit -m 'Add some AmazingFeature'`).
+4.  **Push** to the branch (`git push origin feature/AmazingFeature`).
+5.  Open a **Pull Request**.
 
-MySQL + UUID
+> **⚠️ Note:** When modifying Database Models, please edit them in the `job-shared` directory, not locally in `job-app`.
 
-Ensures data integrity and security by preventing sequential ID enumeration attacks.
+-----
 
-Docker
+## ❓ Common Issues & Solutions
 
-Provides a consistent development environment across different machines.
+### 🔴 Error: Class "App\\Models\\User" not found
 
-✨ Key Features
+  * **Cause:** The application cannot locate the models in the shared folder.
+  * **Solution:** Ensure your `composer.json` has the correct path mapped in autoload and run:
+    ```bash
+    composer dump-autoload
+    ```
 
-Smart Job Search: Filter jobs by type (Remote, Full-time), location, and salary.
+### 🔴 Error: 403 Forbidden on Resume Upload
 
-One-Click Apply: Streamlined application process with PDF upload validation.
+  * **Cause:** Permissions on the storage folder.
+  * **Solution:** Ensure the storage and bootstrap/cache directories are writable:
+    ```bash
+    chmod -R 775 storage bootstrap/cache
+    ```
 
-AI Compatibility Score: Get instant feedback on how well your resume matches the job description.
+### 🔴 Error: Database Connection Refused
 
-Application Tracking: Monitor the status of your applications (Pending, Accepted, Rejected).
+  * **Cause:** Docker container might not be running or port mapping is incorrect.
+  * **Solution:** Check Docker status and ensure `DB_PORT` in `.env` matches your Docker configuration (default `3306`).
 
-Secure Profile: Manage personal information and password securely.
+-----
 
-🤝 How to Contribute
+## 💡 Feedback & Tips
 
-We welcome contributions! Please follow these steps:
+### 👤 For Users
 
-Fork the repository.
+  * **Resume Format:** Ensure your resume is in **PDF format** and does not exceed **2MB**.
+  * **Content:** To get the best AI score, ensure your resume text is **selectable** (not an image scan).
 
-Create a Feature Branch (git checkout -b feature/AmazingFeature).
+### 👨‍💻 For Developers
 
-Commit your changes (git commit -m 'Add some AmazingFeature').
+  * **Queues:** The AI analysis runs in the background. Ensure you run the queue worker locally to process resume analysis jobs:
+    ```bash
+    php artisan queue:work
+    ```
+  * **Security:** Never commit your `.env` file or `OPENAI_API_KEY` to version control.
 
-Push to the branch (git push origin feature/AmazingFeature).
+<br>
 
-Open a Pull Request.
+\<p align="center"\>
+Built with ❤️ by the \<strong\>Job Platform Team\</strong\>
+\</p\>
 
-Note: When modifying Database Models, please edit them in the job-shared directory, not locally in job-app.
-
-❓ Common Issues & Solutions
-
-🔴 Error: Class "App\Models\User" not found
-
-Cause: The application cannot locate the models in the shared folder.
-Solution: Ensure your composer.json has the correct path mapped in autoload and run:
-
-composer dump-autoload
-
-
-🔴 Error: 403 Forbidden on Resume Upload
-
-Cause: Permissions on the storage folder.
-Solution: Ensure the storage and bootstrap/cache directories are writable:
-
-chmod -R 775 storage bootstrap/cache
-
-
-🔴 Error: Database Connection Refused
-
-Cause: Docker container might not be running or port mapping is incorrect.
-Solution: Check Docker status and ensure DB_PORT in .env matches your Docker configuration (default 3306).
-
-💡 Feedback & Tips
-
-For Users 👤
-
-Resume Format: Ensure your resume is in PDF format and does not exceed 2MB.
-
-Content: To get the best AI score, ensure your resume text is selectable (not an image scan).
-
-For Developers 👨‍💻
-
-Queues: The AI analysis runs in the background. Ensure you run php artisan queue:work locally to process resume analysis jobs.
-
-Security: Never commit your .env file or OPENAI_API_KEY to version control.
-
-<p align="center">
-Built with ❤️ by the Job Platform Team
-</p>
+```
