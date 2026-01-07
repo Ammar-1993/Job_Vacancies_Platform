@@ -19,7 +19,7 @@ The platform distinguishes itself by integrating **Artificial Intelligence** int
 
 This repository adopts a **Monorepo** strategy to manage three distinct but interconnected components efficiently:
 
-
+```text
 Job_Vacancies_Platform/
 ├── 📂 job-app/          # (Public) Candidate Portal
 │   ├── User Interface for Job Seekers
@@ -36,13 +36,15 @@ Job_Vacancies_Platform/
     ├── Eloquent Models (User, JobVacancy, Resume,...)
     └── Enums & Shared Logic
 
+```
+
 ---
 
 <div align="center">
 
 <p align="center">Developed by ❤️ Engineer Ammar Al-Najjar</p>
 
-[⬆ Back to Top](#️-Job_Vacancies_Platform---ai-powered-Job_Vacancies_Platform)
+[⬆ Back to Top](#️-Job_VacanciesPlatform---ai-powered-Job_Vacancies_Platform)
 
 </div>
 
