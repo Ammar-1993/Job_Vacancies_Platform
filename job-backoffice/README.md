@@ -118,10 +118,14 @@ php artisan serve --port=8001
 
 > **Admin Portal will be live at:** [http://localhost:8001](https://www.google.com/search?q=http://localhost:8001)
 
-<br>
+-----
 
-\<p align="center"\>
-Built with ❤️ by the \<strong\>Job Platform Team\</strong\>
-\</p\>
+<div align="center">
+
+<p align="center">Developed by ❤️ Engineer Ammar Al-Najjar</p>
+
+[⬆ Back to Top](#️-jobBackoffice---ai-powered-job-backoffice)
+
+</div>
 
 ```
