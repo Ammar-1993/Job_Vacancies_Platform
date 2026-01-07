@@ -202,8 +202,12 @@ We welcome contributions\! Please follow these steps:
 
 <br>
 
-\<p align="center"\>
-Built with ❤️ by the \<strong\>Job Platform Team\</strong\>
-\</p\>
+<div align="center">
+
+<p align="center">Developed by ❤️ Engineer Ammar Al-Najjar</p>
+
+[⬆ Back to Top](#️-jobApp---ai-powered-job-app)
+
+</div>
 
 ```
