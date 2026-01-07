@@ -35,3 +35,12 @@ Job_Vacancies_Platform/
 └── 📂 job-shared/       # (Core) Shared Kernel
     ├── Eloquent Models (User, JobVacancy, Resume,...)
     └── Enums & Shared Logic
+
+
+<div align="center">
+
+<p align="center">Developed by ❤️ Engineer Ammar Al-Najjar</p>
+
+[⬆ Back to Top](#️-Job Vacancies Platform---ai-powered-compliance-analysis-system)
+
+</div>
