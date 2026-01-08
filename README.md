@@ -40,6 +40,20 @@ Job_Vacancies_Platform/
 
 ---
 
+## 🔐 Default Login Credentials (Development / Demo)
+
+When setting up the **Job Backoffice** app using `php artisan migrate --seed`, an administrator account is created by the backoffice database seeder.
+
+- **Role**: admin
+- **Email**: admin@admin.com
+- **Password**: 12345678
+
+Security note:
+- Do **not** use these default credentials in production.
+- Change the admin password immediately after deployment.
+
+---
+
 <div align="center">
 
 <p align="center">Developed by ❤️ Engineer Ammar Al-Najjar</p>
