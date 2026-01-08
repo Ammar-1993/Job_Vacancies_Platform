@@ -118,6 +118,21 @@ php artisan serve --port=8001
 
 > **Admin Portal will be live at:** [http://localhost:8001](https://www.google.com/search?q=http://localhost:8001)
 
+
+---
+
+## 🔐 Default Login Credentials (Development / Demo)
+
+When setting up the **Job Backoffice** app using `php artisan migrate --seed`, an administrator account is created by the backoffice database seeder.
+
+- **Role**: admin
+- **Email**: admin@admin.com
+- **Password**: 12345678
+
+Security note:
+- Do **not** use these default credentials in production.
+- Change the admin password immediately after deployment.
+
 -----
 
 <div align="center">
