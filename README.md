@@ -64,153 +64,171 @@ The system is delivered as a **Laravel monorepo** with clearly separated applica
 
 ## 🧭 System Architecture
 
-The platform is organized as a Laravel monorepo composed of a public candidate portal, a protected employer/admin backoffice, and a shared domain kernel. Both applications use the same database and shared models while keeping their responsibilities and access boundaries separated.
+The platform follows a **modular monorepo architecture**. `job-app` and `job-backoffice` are independent Laravel applications that consume `job-shared` through a local Composer path repository. Both applications use the shared relational database, while candidate resumes are stored through Laravel's filesystem abstraction and can be backed by an S3-compatible cloud disk.
+
+The diagram intentionally separates **user-facing applications**, the **shared domain kernel**, **runtime infrastructure**, and **external services**. Solid arrows represent normal request or data dependencies; dashed arrows represent asynchronous processing.
 
 ```mermaid
-flowchart TB
-    subgraph Clients[Client Layer]
-        Candidate[Job Seeker<br/>Web Browser]
-        Employer[Company Owner / HR<br/>Web Browser]
-        Admin[System Administrator<br/>Web Browser]
+flowchart LR
+    %% =============================
+    %% Actors and entry points
+    %% =============================
+    subgraph Actors[Users]
+        Candidate([Job Seeker])
+        Employer([Company Owner / HR])
+        Administrator([System Administrator])
     end
 
-    subgraph Apps[Application Layer - Laravel]
-        subgraph JobApp[job-app - Candidate Portal]
-            PublicUI[Public Job UI<br/>Blade / Tailwind]
-            CandidateAuth[Authentication & Profile]
-            JobSearch[Job Search & Filtering]
-            ApplicationFlow[Application & Resume Upload]
-            Tracking[Application Tracking]
+    subgraph Presentation[Laravel Web Applications]
+        subgraph CandidatePortal[job-app - Candidate Portal]
+            CandidateUI[Blade UI<br/>Tailwind / JavaScript]
+            CandidateHTTP[HTTP Controllers<br/>Auth / Jobs / Applications]
+            CandidateServices[Application Services<br/>ResumeAnalysisService]
         end
 
-        subgraph Backoffice[job-backoffice - Management Portal]
-            AdminUI[Management UI<br/>Blade / Tailwind]
-            RBAC[RBAC / OBAC Middleware]
-            CompanyManagement[Company & User Management]
-            VacancyManagement[Job Vacancy CRUD]
-            ReviewWorkflow[Application Review Workflow]
-            Analytics[Dashboard & Analytics]
+        subgraph ManagementPortal[job-backoffice - Management Portal]
+            BackofficeUI[Blade UI<br/>Management Screens]
+            BackofficeHTTP[HTTP Controllers]
+            AccessControl[Middleware / Policies<br/>RBAC + OBAC]
+            ManagementServices[Company / Vacancy /<br/>Application Workflows]
         end
     end
 
-    subgraph Shared[job-shared - Shared Kernel]
-        Models[Eloquent Models<br/>User, Company, JobVacancy, Resume, JobApplication]
-        Enums[Enums & Domain Constants]
-        Policies[Policies, Relationships & Shared Business Rules]
+    subgraph Domain[Shared Domain Kernel - job-shared]
+        SharedModels[Eloquent Models<br/>User · Company · JobVacancy<br/>Resume · JobApplication]
+        SharedEnums[Enums and Domain Constants]
+        SharedRules[Relationships and Shared Rules]
     end
 
-    subgraph Infra[Infrastructure Layer]
-        DB[(MySQL / MariaDB<br/>Shared Database)]
-        Queue[(Queue Backend<br/>Redis / Database Queue)]
+    subgraph Runtime[Application Runtime and Data]
+        Database[(MySQL / MariaDB<br/>Shared Relational Database)]
+        ResumeStorage[(Resume Object Storage<br/>S3-compatible cloud disk)]
+        Queue[(Queue Backend<br/>Database or Redis)]
         Worker[Laravel Queue Worker]
-        Storage[(Private Resume Storage<br/>storage/app/resumes)]
-        Cache[(Application Cache)]
+        TempPDF[Temporary Local PDF File<br/>pdftotext extraction]
     end
 
-    subgraph External[External Services]
-        OpenAI[OpenAI API<br/>Resume & Job Analysis]
-        Mail[Mail / Notification Service]
+    subgraph External[External Integration]
+        OpenAI[OpenAI API<br/>Structured JSON parsing<br/>and compatibility evaluation]
     end
 
-    Candidate --> PublicUI
-    Candidate --> CandidateAuth
-    Candidate --> JobSearch
-    Candidate --> ApplicationFlow
-    Candidate --> Tracking
+    %% Entry points
+    Candidate --> CandidateUI
+    Employer --> BackofficeUI
+    Administrator --> BackofficeUI
 
-    Employer --> AdminUI
-    Admin --> AdminUI
+    %% Candidate application request path
+    CandidateUI --> CandidateHTTP
+    CandidateHTTP --> CandidateServices
+    CandidateHTTP --> SharedModels
+    CandidateServices --> SharedModels
+    CandidateServices --> ResumeStorage
+    CandidateServices -. Dispatch analysis job .-> Queue
 
-    AdminUI --> RBAC
-    RBAC --> CompanyManagement
-    RBAC --> VacancyManagement
-    RBAC --> ReviewWorkflow
-    RBAC --> Analytics
+    %% Management request path
+    BackofficeUI --> BackofficeHTTP
+    BackofficeHTTP --> AccessControl
+    AccessControl --> ManagementServices
+    ManagementServices --> SharedModels
+    AccessControl --> SharedRules
 
-    PublicUI --> JobSearch
-    CandidateAuth --> Models
-    JobSearch --> Models
-    ApplicationFlow --> Models
-    Tracking --> Models
+    %% Local Composer path dependency
+    CandidateHTTP -. uses .-> SharedModels
+    BackofficeHTTP -. uses .-> SharedModels
+    SharedModels --> SharedEnums
+    SharedModels --> SharedRules
 
-    CompanyManagement --> Models
-    VacancyManagement --> Models
-    ReviewWorkflow --> Models
-    Analytics --> Models
-    RBAC --> Policies
+    %% Persistence
+    SharedModels --> Database
+    CandidateServices --> ResumeStorage
 
-    Models --> Policies
-    Models --> Enums
-    Models --> DB
-    Policies --> DB
-
-    ApplicationFlow --> Storage
-    ApplicationFlow --> Queue
-    Queue --> Worker
-    Worker --> Storage
+    %% Asynchronous resume analysis pipeline
+    Queue -. consumes .-> Worker
+    Worker --> ResumeStorage
+    Worker --> TempPDF
+    TempPDF --> Worker
     Worker --> OpenAI
-    Worker --> Models
     OpenAI --> Worker
-    Worker --> Mail
-    Tracking --> Mail
+    Worker --> SharedModels
+    Worker --> Database
 
-    JobSearch --> Cache
-    Analytics --> Cache
+    %% Styling
+    classDef actor fill:#eef2ff,stroke:#4f46e5,color:#111827,stroke-width:1px;
+    classDef app fill:#ecfeff,stroke:#0891b2,color:#111827,stroke-width:1px;
+    classDef domain fill:#fef3c7,stroke:#d97706,color:#111827,stroke-width:1px;
+    classDef data fill:#f0fdf4,stroke:#16a34a,color:#111827,stroke-width:1px;
+    classDef external fill:#fdf2f8,stroke:#db2777,color:#111827,stroke-width:1px;
+
+    class Candidate,Employer,Administrator actor;
+    class CandidateUI,CandidateHTTP,CandidateServices,BackofficeUI,BackofficeHTTP,AccessControl,ManagementServices app;
+    class SharedModels,SharedEnums,SharedRules domain;
+    class Database,ResumeStorage,Queue,Worker,TempPDF data;
+    class OpenAI external;
 ```
 
-### 🔄 Core Resume Analysis Flow
+### 🔄 Resume Analysis and Compatibility Scoring
 
 ```mermaid
 sequenceDiagram
+    autonumber
     actor Candidate as Job Seeker
     participant App as job-app
-    participant Storage as Private Storage
-    participant DB as MySQL / MariaDB
-    participant Queue as Laravel Queue
-    participant Worker as Queue Worker
+    participant DB as Shared Database
+    participant Files as Resume Storage
+    participant Queue as Queue Backend
+    participant Worker as Laravel Queue Worker
+    participant PDF as pdftotext
     participant AI as OpenAI API
-    participant Backoffice as job-backoffice
 
-    Candidate->>App: Upload PDF resume and apply
-    App->>Storage: Store resume privately
-    App->>DB: Create application with pending analysis status
-    App->>Queue: Dispatch resume analysis job
-    App-->>Candidate: Confirm application submission
+    Candidate->>App: Submit application with PDF resume
+    App->>App: Validate request and PDF metadata
+    App->>Files: Store resume through filesystem disk
+    App->>DB: Persist application and pending analysis state
+    App->>Queue: Dispatch resume-analysis job
+    App-->>Candidate: Return application confirmation
 
-    Queue->>Worker: Process analysis job
-    Worker->>Storage: Read private resume
-    Worker->>DB: Load resume and job description
-    Worker->>AI: Submit extracted resume and vacancy context
-    AI-->>Worker: Return score, strengths, gaps, and recommendations
-    Worker->>DB: Save compatibility analysis and update status
+    Queue->>Worker: Deliver queued job
+    Worker->>Files: Read private resume object
+    Files-->>Worker: Return PDF bytes
+    Worker->>PDF: Extract selectable text using temporary file
+    PDF-->>Worker: Return raw resume text
+    Worker->>AI: Parse resume into structured JSON
+    AI-->>Worker: Return summary, skills, experience, education
+    Worker->>DB: Persist structured resume information
 
-    Candidate->>App: View application status and feedback
-    App->>DB: Retrieve result
-    App-->>Candidate: Display score and improvement guidance
-    Backoffice->>DB: Review ranked applications
+    Worker->>DB: Load vacancy and candidate resume data
+    Worker->>AI: Evaluate candidate against vacancy
+    AI-->>Worker: Return score from 0-100 and detailed feedback
+    Worker->>DB: Persist score, feedback, and completed state
+
+    Candidate->>App: Request application result
+    App->>DB: Read status and analysis result
+    DB-->>App: Return score and feedback
+    App-->>Candidate: Display compatibility insights
 ```
 
 ### 🧩 Architectural Responsibilities
 
 | Component | Responsibility |
 | --- | --- |
-| `job-app` | Candidate registration, job discovery, filtering, resume upload, applications, and status tracking. |
-| `job-backoffice` | Administration, company management, vacancy management, applicant review, and platform analytics. |
-| `job-shared` | Single source of truth for Eloquent models, enums, relationships, policies, and shared domain rules. |
-| MySQL / MariaDB | Persistent storage for users, companies, vacancies, resumes, applications, and AI analysis results. |
-| Laravel Queue Worker | Asynchronous processing of resume parsing and AI compatibility analysis. |
-| Private Resume Storage | Keeps uploaded resumes inaccessible to the public web root and protects candidate data. |
-| OpenAI API | Performs natural-language analysis of resumes against job descriptions. |
+| `job-app` | Candidate registration, job discovery, filtering, resume upload, applications, and result tracking. |
+| `job-backoffice` | Administration, company management, vacancy management, applicant review, and operational dashboards. |
+| `job-shared` | Shared Composer package containing Eloquent models, enums, relationships, and domain rules. |
+| Shared database | Persists users, companies, vacancies, resumes, applications, statuses, and AI results. |
+| Resume storage | Stores uploaded PDF files through Laravel's filesystem abstraction; production deployments can use an S3-compatible disk. |
+| Queue worker | Runs resume parsing and AI evaluation outside the initial web request. |
+| `ResumeAnalysisService` | Extracts PDF text, requests structured resume data, evaluates job fit, retries selected OpenAI failures, and validates JSON responses. |
+| OpenAI API | Parses resume information and returns compatibility score and feedback. |
 
 ### 🔐 Security and Data Boundaries
 
-- Role-Based Access Control separates administrators from company owners and candidates.
-- Ownership-Based Access Control limits company owners to their own companies, vacancies, and applications.
-- Resumes are stored on a private disk rather than public web storage.
+- RBAC and OBAC are enforced in the management portal before company and vacancy operations are executed.
+- Resume files are handled through a non-public storage path and should be exposed only through authorized application responses.
 - UUID primary keys reduce predictable identifier enumeration.
-- Soft deletes preserve historical records without immediately destroying business data.
-- AI processing is asynchronous so external API calls do not block the application request.
-- Secrets such as `OPENAI_API_KEY` must remain in environment configuration and must never be committed.
+- Soft deletes preserve historical records without immediate destructive deletion.
+- OpenAI calls execute outside the user-facing request when the queue worker is enabled.
+- `OPENAI_API_KEY`, storage credentials, database credentials, and application secrets must remain in environment configuration.
+- AI scores are decision-support signals and should not replace human review or fair hiring practices.
 
 ## 🏗️ Repository Structure
 
@@ -229,7 +247,8 @@ Job_Vacancies_Platform/
 | Backend | Laravel 12, PHP 8.2+ | MVC application framework and domain workflows |
 | Presentation | Blade, Tailwind CSS, JavaScript | Responsive candidate and management interfaces |
 | Persistence | MySQL 8.0+ / MariaDB 10.10+ | Shared relational recruitment data store |
-| AI integration | OpenAI API | Resume analysis and vacancy compatibility insights |
+| AI integration | OpenAI API | Resume parsing and vacancy compatibility insights |
+| File storage | Laravel Filesystem, S3-compatible storage | Private resume persistence |
 | Background processing | Laravel Queues | Non-blocking AI analysis and asynchronous jobs |
 | Dependency management | Composer, NPM | PHP packages and frontend asset tooling |
 | Development environment | Docker-compatible setup | Reproducible local infrastructure |
@@ -244,6 +263,7 @@ Job_Vacancies_Platform/
 - MySQL 8.0+ or MariaDB 10.10+
 - Required PHP extensions: BCMath, Ctype, Fileinfo, JSON, Mbstring, OpenSSL, PDO, Tokenizer, and XML
 - OpenAI API key for AI analysis features
+- `pdftotext` available to the application runtime for selectable-text PDF extraction
 
 ### Candidate Portal
 
@@ -272,7 +292,7 @@ php artisan migrate --seed
 php artisan serve --port=8001
 ```
 
-Configure both `.env` files to use the shared database. Set `OPENAI_API_KEY` in the candidate portal environment and never commit secrets to version control.
+Configure both `.env` files to use the shared database. Configure the candidate portal's OpenAI and storage settings according to the selected deployment environment. Never commit secrets to version control.
 
 ### Background Processing
 
