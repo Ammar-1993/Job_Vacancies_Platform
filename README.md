@@ -1,6 +1,66 @@
 # 🚀 Job Vacancies Platform
 
-An AI-powered recruitment ecosystem that connects job seekers with employers through intelligent job matching, resume analysis, compatibility scoring, and end-to-end hiring management.
+<p align="center">
+  <strong>AI-powered recruitment infrastructure for smarter hiring decisions</strong>
+</p>
+
+<p align="center">
+  A Laravel monorepo that connects job seekers, employers, and administrators through intelligent job discovery, resume analysis, compatibility scoring, and streamlined hiring workflows.
+</p>
+
+<p align="center">
+  <a href="https://github.com/Ammar-1993/Job_Vacancies_Platform">Repository</a> ·
+  <a href="#-system-architecture">Architecture</a> ·
+  <a href="#-core-features">Features</a> ·
+  <a href="#-getting-started">Getting Started</a>
+</p>
+
+---
+
+## 📖 Project Overview
+
+**Job Vacancies Platform** is a next-generation recruitment ecosystem designed to improve the way talent and employers connect. Instead of acting as a traditional job board, the platform combines structured vacancy management with AI-assisted resume evaluation to help candidates understand their fit and help employers prioritize relevant applications.
+
+The system is delivered as a **Laravel monorepo** with clearly separated application responsibilities:
+
+- **Candidate experience:** Discover opportunities, submit applications, and receive AI-powered feedback.
+- **Employer experience:** Manage companies and vacancies, review applicants, and make informed hiring decisions.
+- **Administrative governance:** Control users, platform data, access permissions, and operational workflows.
+- **Shared domain foundation:** Maintain consistent models, enums, relationships, and business rules across applications.
+
+### 🎯 Product Goals
+
+1. Reduce friction throughout the candidate application journey.
+2. Provide employers with structured, actionable applicant insights.
+3. Automate the first stage of resume-to-vacancy comparison.
+4. Protect sensitive candidate information through private storage and access control.
+5. Preserve a single source of truth for shared recruitment data.
+
+## ✨ Core Features
+
+### For Job Seekers
+
+- Search and filter vacancies by employment type, location, salary, and other attributes.
+- Create and manage a secure candidate profile.
+- Submit applications with PDF resume validation.
+- Receive an AI-generated compatibility score and improvement recommendations.
+- Track application progress through statuses such as pending, accepted, and rejected.
+
+### For Employers and HR Teams
+
+- Create and manage company profiles and job vacancies.
+- Review applications from a centralized management portal.
+- Use AI-generated compatibility insights to support applicant prioritization.
+- Manage vacancy and application workflows with ownership-based restrictions.
+- Access operational information through management dashboards and analytics.
+
+### For Administrators
+
+- Manage users, companies, vacancies, and applications.
+- Enforce Role-Based Access Control (RBAC).
+- Enforce Ownership-Based Access Control (OBAC) for company owners.
+- Preserve historical records through soft deletion strategies.
+- Maintain data quality for the public candidate portal.
 
 ## 🧭 System Architecture
 
@@ -8,14 +68,12 @@ The platform is organized as a Laravel monorepo composed of a public candidate p
 
 ```mermaid
 flowchart TB
-    %% Client layer
     subgraph Clients[Client Layer]
         Candidate[Job Seeker<br/>Web Browser]
         Employer[Company Owner / HR<br/>Web Browser]
         Admin[System Administrator<br/>Web Browser]
     end
 
-    %% Presentation and application layer
     subgraph Apps[Application Layer - Laravel]
         subgraph JobApp[job-app - Candidate Portal]
             PublicUI[Public Job UI<br/>Blade / Tailwind]
@@ -35,14 +93,12 @@ flowchart TB
         end
     end
 
-    %% Shared domain layer
     subgraph Shared[job-shared - Shared Kernel]
         Models[Eloquent Models<br/>User, Company, JobVacancy, Resume, JobApplication]
         Enums[Enums & Domain Constants]
         Policies[Policies, Relationships & Shared Business Rules]
     end
 
-    %% Infrastructure layer
     subgraph Infra[Infrastructure Layer]
         DB[(MySQL / MariaDB<br/>Shared Database)]
         Queue[(Queue Backend<br/>Redis / Database Queue)]
@@ -51,13 +107,11 @@ flowchart TB
         Cache[(Application Cache)]
     end
 
-    %% External services
     subgraph External[External Services]
         OpenAI[OpenAI API<br/>Resume & Job Analysis]
         Mail[Mail / Notification Service]
     end
 
-    %% Client to applications
     Candidate --> PublicUI
     Candidate --> CandidateAuth
     Candidate --> JobSearch
@@ -67,34 +121,29 @@ flowchart TB
     Employer --> AdminUI
     Admin --> AdminUI
 
-    %% Backoffice security and features
     AdminUI --> RBAC
     RBAC --> CompanyManagement
     RBAC --> VacancyManagement
     RBAC --> ReviewWorkflow
     RBAC --> Analytics
 
-    %% Candidate workflows
     PublicUI --> JobSearch
     CandidateAuth --> Models
     JobSearch --> Models
     ApplicationFlow --> Models
     Tracking --> Models
 
-    %% Backoffice to shared kernel
     CompanyManagement --> Models
     VacancyManagement --> Models
     ReviewWorkflow --> Models
     Analytics --> Models
     RBAC --> Policies
 
-    %% Shared kernel to infrastructure
     Models --> Policies
     Models --> Enums
     Models --> DB
     Policies --> DB
 
-    %% Resume processing pipeline
     ApplicationFlow --> Storage
     ApplicationFlow --> Queue
     Queue --> Worker
@@ -105,7 +154,6 @@ flowchart TB
     Worker --> Mail
     Tracking --> Mail
 
-    %% Supporting infrastructure
     JobSearch --> Cache
     Analytics --> Cache
 ```
@@ -174,42 +222,81 @@ Job_Vacancies_Platform/
 └── README.md
 ```
 
-## ✨ Main Capabilities
-
-- Smart job search by type, location, salary, and other vacancy attributes.
-- One-click applications with PDF resume validation.
-- AI-generated compatibility score and actionable feedback.
-- Candidate application tracking with pending, accepted, and rejected states.
-- Company and vacancy management for employers and administrators.
-- Centralized application review and operational analytics.
-- Shared domain models across both Laravel applications.
-
 ## ⚙️ Technology Stack
 
-- **Backend:** Laravel 12, PHP 8.2+
-- **Frontend:** Blade, Tailwind CSS, JavaScript
-- **Database:** MySQL 8.0+ or MariaDB 10.10+
-- **AI:** OpenAI API
-- **Asynchronous processing:** Laravel Queues
-- **Environment:** Docker-compatible development setup
+| Layer | Technology | Purpose |
+| --- | --- | --- |
+| Backend | Laravel 12, PHP 8.2+ | MVC application framework and domain workflows |
+| Presentation | Blade, Tailwind CSS, JavaScript | Responsive candidate and management interfaces |
+| Persistence | MySQL 8.0+ / MariaDB 10.10+ | Shared relational recruitment data store |
+| AI integration | OpenAI API | Resume analysis and vacancy compatibility insights |
+| Background processing | Laravel Queues | Non-blocking AI analysis and asynchronous jobs |
+| Dependency management | Composer, NPM | PHP packages and frontend asset tooling |
+| Development environment | Docker-compatible setup | Reproducible local infrastructure |
 
-## 🚀 Development Notes
+## 🚀 Getting Started
 
-Install dependencies independently inside `job-app` and `job-backoffice`, configure each `.env` file to use the shared database, build frontend assets, and run a queue worker for AI analysis:
+### Prerequisites
+
+- PHP 8.2 or higher
+- Composer
+- Node.js and NPM
+- MySQL 8.0+ or MariaDB 10.10+
+- Required PHP extensions: BCMath, Ctype, Fileinfo, JSON, Mbstring, OpenSSL, PDO, Tokenizer, and XML
+- OpenAI API key for AI analysis features
+
+### Candidate Portal
+
+```bash
+git clone https://github.com/Ammar-1993/Job_Vacancies_Platform.git
+cd Job_Vacancies_Platform/job-app
+composer install
+composer dump-autoload
+cp .env.example .env
+npm install
+npm run build
+php artisan storage:link
+php artisan serve
+```
+
+### Management Portal
+
+```bash
+cd ../job-backoffice
+composer install
+composer dump-autoload
+cp .env.example .env
+npm install
+npm run build
+php artisan migrate --seed
+php artisan serve --port=8001
+```
+
+Configure both `.env` files to use the shared database. Set `OPENAI_API_KEY` in the candidate portal environment and never commit secrets to version control.
+
+### Background Processing
+
+Run a queue worker so resume analysis jobs can be processed:
 
 ```bash
 php artisan queue:work
 ```
 
-Never use the development seed credentials in production. Change all default passwords and configure production secrets before deployment.
-
-## 🤝 Contribution
+## 🧪 Development and Contribution Guidelines
 
 1. Fork the repository.
-2. Create a feature branch.
-3. Implement and test your changes.
-4. Push the branch and open a pull request.
-5. When changing shared models or domain rules, update `job-shared` so both applications remain consistent.
+2. Create a focused feature branch.
+3. Implement and test the change in the relevant application.
+4. Update `job-shared` when changing shared models, enums, or domain rules.
+5. Run formatting, automated tests, and relevant application checks.
+6. Push the branch and open a pull request with a clear technical description.
+
+## ⚠️ Security Notes
+
+- Development seed credentials are for local demonstration only and must be changed before production deployment.
+- Do not commit `.env`, API keys, database passwords, or uploaded resumes.
+- Keep resume files on private storage and expose them only through authorized application flows.
+- Review OpenAI data-handling requirements before using the platform with production candidate data.
 
 ---
 
